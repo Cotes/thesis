@@ -1,0 +1,58 @@
+\chapter{Introduction}
+
+In the last few years, we have witnessed a clear shift from Personal Computers and local storage to multi-device access and cloud storage services. The Personal Computer (PC) paradigm is slowly waning as traditional PCs are being outnumbered by other devices like smartphones and tablets. This means that in the next years  users will access their digital lives in the cloud from a variety of heterogeneous devices and platforms. This is clearly reflected by the massive adoption of services like Dropbox, U1, Google Drive or SkyDrive, among others.  The term ``Personal Cloud'' has been coined in the last years to reflect this trend and many analysts forecast  a bright future for these solutions~\cite{forrester}\cite{gartner}. To clarify the term we propose here the so-called 3S Personal Cloud Definition:
+
+\textit{The Personal Cloud is a unified digital  locker for our personal data offering three key services: Storage, Synchronization and Sharing.  On the one hand, it must provide redundant and trustworthy cloud data storage for our information flows irrespective of their type. On the other hand, it must provide syncing and file exploring capabilities in different heterogeneous platforms and devices. And finally, it must offer fine-grained information sharing to third-parties (users and applications).}
+
+Despite the much trumpeted success of the so-called cloud storage revolution, exemplified by Dropbox and the 
+likes, little is known about the architecture of these commercial solutions, and existing open source alternatives 
+(e.g., ownCloud\footnote{\url{ http://owncloud.org/ }}, SparkleShare\footnote{\url{ http://sparkleshare.org/}})
+fall short of addressing all the requirements of the Personal Cloud, mainly in terms of scalability and extensibility. 
+In this sense, architecturing a Personal Cloud is not trivial, as this model is still in early stages, and no reference architecture exists.
+
+Architectural complexity is well captured by file synchronization, as the success of Personal Cloud services
+lies in great measure in the scalability of their sync services. In this cloud paradigm, a desktop client
+software typically keeps all the files in a specified folder in sync with the servers, automatically synchronizing changes across the devices of the same user. Since files can be shared with other users, changes in
+shared folders must be also synced with every account that has been given access to the shared folders. 
+
+Making
+this process scalable is not straightforward, as it involves the intricate interaction of many components. For
+instance, to improve scalability, Personal Clouds use numerous techniques to only transfer those parts of the
+files that have been modified since the last synchronization. To achieve this, these systems internally do not
+use the concept of files, but split every file into chunks, each treated as an independent object. If a chunk
+is already stored in the storage servers, it is not transferred, saving traffic and storage. However, working
+at the chunk level requires the sync process to manage more metadata than operating at the file level, making
+it more critical the way metadata is internally processed. Further, as the amount of metadata is directly proportional
+to the number of chunks, the efficiency of the chunking algorithm impacts the performance of file syncing.
+
+Analogously, to efficiently maintain the consistency of files, any change performed elsewhere must be advertised 
+as soon as they occur to reduce conflicts~\cite{drago2012inside}, in particular, when a file is susceptible to
+be modified by more than one client at the same time. This requires the sync process to operate quickly to
+commit changes along with an efficient notification service to inform clients about file modifications. 
+
+Therefore, a practical implementation of an open Personal Cloud requires making a big effort. In 
+this context, the CloudSpaces project (\url{ http://cloudspaces.eu/}) , which has been initiated
+in the frame of European Commission's FP7-ICT programme, is attempting to fill this gap. Concretely,
+as far as we know, we are the first to propose an open architecture for Personal Clouds. It is worth
+noting here that although at the time of this writing, our reference implementation includes the
+software necessary to run a basic Personal Cloud, in this work we put more emphasis on the sync protocol, which
+is the core service of any Personal Cloud. Since a serious impediment to progress in cloud storage
+research is the lack of a standard framework, we hope to provide a useful framework for developing
+and testing new ideas in a relatively easy manner.
+
+In summary, we contribute the following:
+
+\begin{enumerate}
+\item Extensible framework with a plugin-based architecture for  storage back-ends, metadata-back-ends,
+ communication middleware, and chunking  algorithms.
+\item Reference open source implementation called StackSync, which is based on a high-performance messaging middleware 
+for asynchronously dispatching incoming and outgoing push notifications.
+\item Benchmarking and validation framework for Personal Clouds, which provides trace generators and test scripts. 
+
+\end{enumerate}
+
+
+The rest of the article is structured as follows. We review related work in Section 2. We give an
+overview of the main technical ingredients of a Personal Cloud in Section 3. We introduce our 
+open architecture in Section 4. In Section 5, we evaluate our reference implementation and conclude
+in Section 6.

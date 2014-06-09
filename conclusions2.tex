@@ -1,0 +1,19 @@
+\chapter{Conclusions}
+
+In this article, we have introduced StackSync, an open framework for Personal Cloud systems.
+Its architecture is highly modular, with each module represented by a well-defined API,
+allowing researchers to replace components for innovation in versioning,
+deduplication, live synchronization or continuous reconciliation, among other relevant topics. 
+StackSync provides a reference implementation and useful tools for rapid prototyping and evaluation. 
+The reference implementation of the file synchronization engine has been built
+on top of a lightweight MOM-RPC middleware, called ObjectMQ, whose one-to-one and one-to-many
+abstractions has considerably simplified the design of StackSync. This middleware is ideally
+suited to support push notification over persistent connections,
+which is critical for live synchronization.  
+
+StackSync is now under active development in the context of the FP7 CloudSpaces project
+with the collaboration of several partners. Further work includes adding privacy measures and
+supporting adaptive storage in collaboration with EPFL and EURECOM. 
+Since today most of these systems are proprietary, relying on infrastructures that are
+invisible to the research community, we believe that StackSync will help to advance state
+of the art in Personal Cloud systems.

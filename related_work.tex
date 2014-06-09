@@ -1,0 +1,108 @@
+\chapter{Related Work}
+
+\subsection{A Brief History of the Personal Cloud Term}
+
+In the past years there have been divergent views of the ``Personal Cloud'' concept.  
+For example, in \cite{hari2012personal} authors propose an architecture and design
+for accessing and sharing computational resources in virtual machines. For them, a
+Personal Cloud is a collection of Virtual Machines running on unused computers at the edge.
+Another different view focuses on collaborative work \cite{ardissono2009service},  
+where a web infrastructure is defined to provide a unified environment
+for handling activities and collaborations. Finally, a recent trend \cite{windley}
+ goes further and defines the Personal Cloud as a cloud Operating 
+System that offers a core set of services around identity, trust, data access and 
+even programming models.
+
+In this paper, we focus on Personal Cloud Storage platforms that take care of data
+sync and sharing from heterogeneous devices. In fact,  the term ``Personal Cloud'' have
+received a lot of attention with the recent research reports from Forrester \cite{forrester}
+and Gartner \cite{gartner}. Like us, these reports associate the term Personal Cloud with
+online cloud storage services such as Dropbox, Box, or Google Drive among others.
+
+\subsection{Personal Cloud Systems}
+
+In the last few years, we have seen how the market of cloud storage is growing rapidly. 
+Despite the rush to simplify our digital lives, many of the commercial Personal Clouds
+in operation today like Dropbox are \textit{proprietary}, and rely on algorithms that are
+\textit{invisible} to the research community, and what is even worse, existing open source
+alternatives fall short of addressing all the requirements of the Personal Cloud.
+Next we discuss the existing open source solutions for the Personal Cloud, namely
+SparkleShare, ownCloud and Syncany.
+
+SparkleShare\footnote{\url{http://sparkleshare.org/}} is built on top of Git, using it 
+as both its storage and syncing back-end. SparkleShare clients use push notification
+to receive changes, and maintain a direct connection with the server over SSH to exchange file data.
+When a client is started, it connects to a notification server. The notification server tells the other
+clients subscribed to that folder that they can pull new changes from the repository after a user
+change. 
+
+Using Git as the storage back-end is a double-edged sword. While Git implements an efficient request
+method to download changes from the server (git pull command), avoiding massive metadata exchanges
+between server and clients, it is not prepared to process large binary files. Also, this architecture
+tied to the Git protocol is also difficult to scale and deploy in cloud environments.
+
+ownCloud\footnote{\url{http://owncloud.org/}} is the most famous open source  Personal Cloud 
+and they have an active community. We refer here to the Community Edition of ownCloud, since their enterprise edition is not available to the public. In ownCloud, clients communicate with the server following a \textit{pull} strategy, i.e. clients ask periodically to the server for new changes. There are two types of data traffic: data and metadata. For data exchange, ownCloud uses a REST API; however, metadata traffic is transferred using the WebDAV protocol. 
+Because both types of traffic are processed by the same server, data and metadata traffic are completely coupled.
+
+Unfortunately, ownCloud is not an extensible and modular framework like StackSync. In this line, their developer community is mainly working around the web front-end. Although we will devote a subsection to ownCloud in the validation, we can advance that their inefficient pull strategy with massive control overheads is not scalable. Furthermore, their sync flows and data flows are tightly coupled, and they do not even provide basic chunking or deduplication mechanisms. 
+
+Syncany \footnote{\url{http://syncany.org/}} is an open source Personal Cloud developed by Philip Heckel in Java. It is a client-side Java application that can synchronise against a variety of storage back-ends thanks to their extensible plugin model. They also provide extensible mechanisms for chunking and their architecture is elegant, clean and modular.
+
+Although we give much credit to Syncany, proof of that is that the StackSync client is a branch project that evolved 
+from Syncany, it presents a number of drawbacks that made us evolve towards the current StackSync architecture. 
+The major shortcoming is the lack of scalability of Syncany due to its heavy pull strategy with metadata and
+data flows heavily coupled. To support versioning and resolve conflicts, Syncany relies on a metadata file 
+that contains the complete history of each individual file, and that is stored in the storage back-end
+as a regular file. To determine the most recent version of a file, the Syncany client needs first to
+download this metadata file, which grows with each new file modification, severely limiting scalability.
+
+\subsection{Synchronization Algorithms}
+
+At the core of personal cloud is file sync. Although a rush of online file sync services have
+been entering the market during the last years, evidenced by the explosion in popularity of
+Dropbox and competitors, little is known about the design and implementation of commercial
+sync protocols. According to a recent characterization of Dropbox~\cite{drago2012inside}, file synchronization
+is built upon third-party libraries such as librsync, but the role of this library is uncertain
+because of the very nature of the rsync algorithm~\cite{tridgell96rsync}. Other popular tools like 
+unison~\cite{unison} that use the same basic algorithm suffer from the same deficiencies.
+
+rsync is symmetric, and provides pairwise synchronization between two devices, where the rsync
+utility running on each computer must have local access to the entire file. This requirement
+poses the first practical limitation to the adoption of rsync because working at the file level
+prevents efficient data deduplication. To save storage space and money, services like Dropbox
+split files into chunks and store them at multiple nodes on the server side. A straightforward
+adaptation of rsync to this context would be piecing together the chunks and reconstructing
+whole file at a chosen server and then operate on it. This, unfortunately, would waste massive
+intra-cluster bandwidth, deteriorating significantly deduplication efficiency. It is worth
+noting here that, although rsync finds chunks of data that occur both in the old file and the
+new file, it requires the side acting as a server to compute hashes for all possible alignments
+in its file in order to find a match. For this, it needs the whole file.  
+
+In addition, if a single character is modified in each chunk of the old file, then no match
+will be found by the server and rsync will be completely useless~\cite{langford01}. To address this limitation,
+a number of single-round and multi-round protocols have been proposed in the last ten years. 
+Multi-round protocols allow communicating fewer bits in total by using additional communication
+rounds; see~\cite{langford01} and~\cite{suel04}. However, the fact of taking multiple passes over files presents evident
+disadvantages in terms of protocol complexity, computing and I/O overheads, and communication
+latency. Recent single-round protocols~\cite{irmak05}\cite{hao08} bypass this difficulty by using variable-length
+content-based chunking~\cite{Muthitacharoen01}. However, since these protocols only synchronize files between two
+different machines at a time, they are not directly applicable to Personal Clouds, where file
+changes occurring elsewhere are automatically notified to any other device sharing that file. 
+
+There is a large body of work by the OS community that attempts to detect redundancies in order
+to reduce storage or transmissions costs, like LFBS~\cite{Muthitacharoen01} and Pastiche~\cite{Cox02}, among others, which
+have inspired in one way or another many of today's online cloud storage services. These systems
+operate at block level by relying on variable-length content-based chunking, rather than at
+file level. Compared with personal cloud applications, distributed file systems pursue a
+different objective and can skip implementing some basic functionality in personal clouds like
+file version management or the scalable notification of updates as soon as they occur. In fact,
+LBFS uses leases in which the server's obligation to inform a client of changes expires after one
+minute. The result is that the client will be out of sync once a lease on a file has expired. 
+In Dropbox, however, any change on the central storage is advertised as soon as it is made~\cite{drago2012inside}.
+For this purpose, the Dropbox client keeps continuously opened a TCP connection to a notification
+server, used for receiving information about changes performed elsewhere.
+
+Overall, \textit{providing an efficient and scalable sync protocol} poses a grand challenge for
+engineers in charge of building Personal Cloud storage services, due to the intricate
+relationships between deduplication, notification and metadata management.
