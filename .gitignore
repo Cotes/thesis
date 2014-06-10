@@ -3,3 +3,9 @@
 *.gz
 *.aux
 *.toc
+*.mlf*
+*.mtc*
+*.mlt*
+*.out
+*.maf
+*.lo*

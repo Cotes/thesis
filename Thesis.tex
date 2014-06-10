@@ -1,9 +1,8 @@
-%\documentclass[a4paper,12pt,twoside]{scrbook}
 \documentclass[a4paper,11pt,twoside]{ThesisStyle}
 
-\newcommand\mesztesi{September}
+\newcommand\mesztesi{June}
 
-\newcommand\anytesi{2013}
+\newcommand\anytesi{2014}
 
 \newcommand\datatesi{\mestesi~\anytesi}
 
@@ -23,8 +22,6 @@
 \newtheorem{example}{Example}
 \newtheorem{case}{Case}
 
-\usepackage[a4paper,left=3cm,right=3cm,top=3cm,bottom=4cm]{geometry}
-
 \usepackage{color}
 \usepackage{xcolor}
 \usepackage{colortbl}
@@ -32,11 +29,14 @@
 \usepackage{multirow}
 \usepackage{booktabs}
 \usepackage{ctable}
-\usepackage{longtable}
 \usepackage{listings}
 \usepackage{epstopdf}
 \usepackage{graphicx}
 \usepackage{amssymb}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\numberwithin{algorithm}{chapter} % numbering algorithms by chapter
+\numberwithin{theorem}{chapter} % numbering theorems by chapter
 \usepackage{amsthm}
 \usepackage{amsmath}
 \usepackage{url}
@@ -44,28 +44,35 @@
 \usepackage{multirow}
 \usepackage{subfigure}
 
+\usepackage{longtable}
 \usepackage{array}
 \usepackage{booktabs}
-\usepackage{parskip}
+
 \usepackage{algpseudocode}
 \usepackage{algorithm}
-\setlength{\parindent}{15pt}
-
-%remove spacing in subsubsection titles
-\usepackage[compact]{titlesec}
-\titlespacing{\subsubsection}{0pt}{0.5ex}{0ex}
+%\renewcommand{\thesection}{\arabic{section}}
 
 
+\definecolor{bgcode}{RGB}{242,242,242}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.6}
 \definecolor{javared}{rgb}{0.6,0,0} % for strings
 \definecolor{javagreen}{rgb}{0.25,0.5,0.35} % comments
 \definecolor{javapurple}{rgb}{0.5,0,0.35} % keywords
 \definecolor{javadocblue}{rgb}{0.25,0.35,0.75} % javadoc
+\lstdefinelanguage{XML}
+{
+  morestring=[b]",
+  morestring=[s]{>}{<},
+%  morecomment=[s]{<?}{?>},
+  stringstyle=\color{black},
+  identifierstyle=\color{darkblue},
+  keywordstyle=\color{cyan},
+  morekeywords={xmlns,version,encoding,type}% list your attributes here
+}
 
 \newcommand{\myparagraph}[1]{\paragraph{#1}\mbox{}\\}
 
 \begin{document}
-
-\include{title}
 
 \include{TitlePage}
 
@@ -73,7 +80,7 @@
 ~~~\newpage\clearpage
 
 
-\include{abstract2}
+\include{abstract}
 
 \cleardoublepage
 
@@ -89,7 +96,6 @@
 \dominilot \listoftables
 \cleardoublepage
 
-%\include{abstract2}
 \include{introduction}
 \include{related_work}
 \include{understanding}
