@@ -1,0 +1,69 @@
+This is BibTeX, Version 0.99d (TeX Live 2012/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: Thesis.aux
+A level-1 auxiliary file: TitlePage.aux
+A level-1 auxiliary file: abstract.aux
+A level-1 auxiliary file: Acknowledgments.aux
+A level-1 auxiliary file: introduction.aux
+A level-1 auxiliary file: related_work.aux
+A level-1 auxiliary file: understanding.aux
+A level-1 auxiliary file: reference_architecture.aux
+A level-1 auxiliary file: validation.aux
+A level-1 auxiliary file: conclusions2.aux
+The style file: plain.bst
+Database file #1: citations.bib
+Warning--I didn't find a database entry for "respectnetwork"
+Warning--I didn't find a database entry for "pcmag"
+Warning--I didn't find a database entry for "openi"
+Warning--I didn't find a database entry for "directsync"
+Warning--I didn't find a database entry for "lansync"
+Warning--I didn't find a database entry for "oauth"
+Warning--I didn't find a database entry for "liu2013"
+Warning--I didn't find a database entry for "drago2013benchmarking"
+Warning--I didn't find a database entry for "li13"
+Warning--to sort, need author or key in gartner
+Warning--to sort, need author or key in omq
+Warning--to sort, need author or key in Dropbox
+Warning--to sort, need author or key in kryo
+You've used 26 entries,
+            2118 wiz_defined-function locations,
+            656 strings with 7807 characters,
+and the built_in function-call counts, 8515 in all, are:
+= -- 819
+> -- 379
+< -- 10
++ -- 157
+- -- 126
+* -- 505
+:= -- 1312
+add.period$ -- 74
+call.type$ -- 26
+change.case$ -- 140
+chr.to.int$ -- 0
+cite$ -- 30
+duplicate$ -- 345
+empty$ -- 737
+format.name$ -- 126
+if$ -- 1866
+int.to.chr$ -- 0
+int.to.str$ -- 26
+missing$ -- 16
+newline$ -- 129
+num.names$ -- 44
+pop$ -- 209
+preamble$ -- 1
+purify$ -- 115
+quote$ -- 0
+skip$ -- 292
+stack$ -- 0
+substring$ -- 440
+swap$ -- 107
+text.length$ -- 10
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 102
+warning$ -- 4
+while$ -- 77
+width$ -- 28
+write$ -- 263
+(There were 13 warnings)

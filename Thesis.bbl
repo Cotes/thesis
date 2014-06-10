@@ -1,0 +1,137 @@
+\begin{thebibliography}{10}
+
+\bibitem{gartner}
+Gartner consumer research: Personal cloud.
+\newblock \url{http://www.gartner.com/technology/research/personal-cloud/#}.
+
+\bibitem{Dropbox}
+How we've scaled dropbox.
+\newblock \url{http://www.youtube.com/watch?v=PE4gwstWhmc}.
+
+\bibitem{kryo}
+Kryo: Fast, efficient java serialization and cloning.
+\newblock \url{http://code.google.com/p/kryo/}.
+
+\bibitem{omq}
+Objectmq mom-rpc middleware.
+\newblock \url{https://github.com/cloudspaces/objectmq}.
+
+\bibitem{Agrawal07}
+N.~Agrawal, W.~J. Bolosky, J.~R. Douceur, and J.~R. Lorch.
+\newblock A five-year study of file-system metadata.
+\newblock {\em Trans. Storage}, 3(3), October 2007.
+
+\bibitem{ardissono2009service}
+L.~Ardissono, A.~Goy, G.~Petrone, and M.~Segnan.
+\newblock From service clouds to user-centric personal clouds.
+\newblock In {\em Proc. of IEEE CLOUD}, pages 1--8, 2009.
+
+\bibitem{Balasubramaniam98}
+S.~Balasubramaniam and B.~C. Pierce.
+\newblock What is a file synchronizer?
+\newblock In {\em Proc. of ACM/IEEE MobiCom}, pages 98--108, 1998.
+
+\bibitem{Cox02}
+L.~P. Cox, C.~D. Murray, and B.~D. Noble.
+\newblock Pastiche: making backup cheap and easy.
+\newblock In {\em Proc. of OSDI}, pages 285--298, 2002.
+
+\bibitem{drago2012inside}
+I.~Drago, M.~Mellia, M.~Munafo, A.~Sperotto, R.~Sadre, and A.~Pras.
+\newblock Inside dropbox: Understanding personal cloud storage services.
+\newblock In {\em Proc. of ACM IMC}, pages 481--494, 2012.
+
+\bibitem{Eshghi05}
+K.~Eshghi and H.~K. Tang.
+\newblock {A Framework for Analyzing and Improving Content-Based Chunking
+  Algorithms}.
+\newblock \url{http://www.hpl.hp.com/techreports/2005/HPL-2005-30R1.pdf}, 2005.
+
+\bibitem{forrester}
+F.~E. Gillett, C.~Mines, T.~Schadler, M.~Yamnitsky, H.~Shey, A.~Martland, and
+  R.~Iqbals.
+\newblock The personal cloud: Transforming personal computing, mobile, and web
+  markets.
+\newblock In {\em Forrester Research, BT Futures Report}, 2011.
+
+\bibitem{hao08}
+Y.~Hao, U.~Irmak, and T.~Suel.
+\newblock Algorithms for low-latency remote file synchronization.
+\newblock In {\em Proc. of IEEE INFOCOM}, pages 156--160, 2008.
+
+\bibitem{hari2012personal}
+A.~Hari, R.~Viswanathan, T.V. Lakshman, and Y.J. Chang.
+\newblock The personal cloud -- design, architecture and matchmaking algorithms
+  for resource management.
+\newblock In {\em Proc. of 2nd Usenix Hot-ICE}, pages 3--3, 2012.
+
+\bibitem{harnik10}
+D.~Harnik, B.~Pinkas, and A.~Shulman-Peleg.
+\newblock Side channels in cloud services: Deduplication in cloud storage.
+\newblock {\em IEEE Security \& Privacy}, 8(6):40--47, 2010.
+
+\bibitem{syncany}
+P.~Heckel.
+\newblock Syncany open source file synchronization.
+\newblock \url{http://www.syncany.org/}.
+
+\bibitem{irmak05}
+U.~Irmak, S.~Mihaylov, and T.~Suel.
+\newblock Improved single-round protocols for remote file synchronization.
+\newblock In {\em Proc. of IEEE INFOCOM}, pages 1665--1676, 2005.
+
+\bibitem{langford01}
+J.~Langford.
+\newblock Multiround rsync.
+\newblock \url{www.cs.cmu.edu/~jcl/research/mrsync/-mrsync.ps}, 2001.
+
+\bibitem{menasce2005mom}
+D.~A Menasce.
+\newblock Mom vs. rpc: Communication models for distributed applications.
+\newblock {\em IEEE Internet Computing}, 9(2):90--93, 2005.
+
+\bibitem{Muthitacharoen01}
+A.~Muthitacharoen, B.~Chen, and D.~Mazi\`{e}res.
+\newblock A low-bandwidth network file system.
+\newblock {\em SIGOPS Oper. Syst. Rev.}, 35(5):174--187, 2001.
+
+\bibitem{amqp}
+OASIS.
+\newblock Amqp: Advanced message queueing protocol.
+\newblock \url{http://www.amqp.org/}.
+
+\bibitem{unison}
+B.~C. Pierce.
+\newblock {Unison File Synchronizer}.
+\newblock http://www.cis.upenn.edu/\~{}bcpierce/unison/.
+
+\bibitem{suel04}
+T.~Suel, P.~Noel, and D.~Trendafilov.
+\newblock Improved file synchronization techniques for maintaining large
+  replicated collections over slow networks.
+\newblock In {\em Proc. of ICDE}, pages 153--, 2004.
+
+\bibitem{Tanenbaum:2001:DSP:559404}
+A.~S. Tanenbaum and M.~Van Steen.
+\newblock {\em Distributed Systems: Principles and Paradigms}.
+\newblock Prentice Hall PTR, Upper Saddle River, NJ, USA, 2001.
+
+\bibitem{Tarasov12}
+V.~Tarasov, A.~Mudrankit, W.~Buik, P.~Shilane, G.~Kuenning, and E.~Zadok.
+\newblock Generating realistic datasets for deduplication analysis.
+\newblock In {\em Proc. of USENIX ATC}, pages 24--24, 2012.
+
+\bibitem{tridgell96rsync}
+A.~Tridgell and P.~Mackerras.
+\newblock The rsync algorithm.
+\newblock Technical Report TR-CS-96-05, Australian National University, Dept.
+  of Computer Science, June 1996.
+
+\bibitem{windley}
+P.~Windley.
+\newblock From personal computers to personal clouds.
+\newblock
+  \url{http://www.windley.com/archives/2012/04/from_personal_computers_to_personal_clouds.shtml},
+  2012.
+
+\end{thebibliography}
