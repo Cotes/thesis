@@ -67,18 +67,21 @@ Such popular services need to scale well in order to be successful. A system is 
 	\begin{sideways}\textbf{Nature}\end{sideways} &
 	\begin{sideways}\textbf{Free storage}\end{sideways} &
 	\begin{sideways}\textbf{File size limit}\end{sideways} & 
+	\begin{sideways}\textbf{Deduplication}\end{sideways} & 
 	\begin{sideways}\textbf{Scalable}\end{sideways} \\ \hline
 
 	\textbf{Google Drive} &
 	Private &
 	5 GB &
 	10 GB &
+	No &
 	Yes \\ \hline
 
 	\textbf{Dropbox} &
 	Public (Amazon S3) &
 	2 GB &
 	300 MB (web only) &
+	Yes &
 	Yes \\ \hline
 	
 	
@@ -86,24 +89,28 @@ Such popular services need to scale well in order to be successful. A system is 
 	Private &
 	5 GB & 
 	250 MB (free acounts) &
+	? &
 	Yes \\ \hline
 	
 	\textbf{SugarSync} & 
 	Public (Carpathia Hosting) &
 	5 GB &
 	Unlimited &
+	? &
 	Yes \\ \hline
 	
 	\textbf{OneDrive} & 
 	Private &
 	7 GB &
 	2 GB (client), 300 MB (web) &
+	? &
 	Yes \\ \hline
 	
 	\textbf{ownCloud} &
 	Private &
 	Customizable &
 	Customizable &
+	No &
 	No \\ \hline
 
     \end{tabular}
@@ -118,10 +125,6 @@ As we can see in table~\ref{tab:pc_storage}, most of the analysed Personal Cloud
 \subsection{Sync}
 One of the key aspects of Personal Clouds is \textbf{file synchronization} (or syncing). We understand it as a two-way file synchronization, which means that a locally modified file is updated in each location this file is present. In addition, if a file is modified remotely, these changes will be automatically updated locally, with the purpose of keeping every copy of a file identical in all locations.
 
-In this line, some companies also implement \textbf{P2P file syncing}. We understand P2P file syncing as the ability to keep two or more files identical in different locations without resorting to a central service. It allows companies to reduce the outgoing traffic from the data center, which translates in cost savings. It is also useful for users that want to store the same files on two or more computers avoiding the need to resort to the server.
-
-Some solutions enable users to sync files from \textbf{multiple folders} throughout their file system. For instance, when syncing you will need to tell the application that "Folder A" on your laptop should sync with "Folder B" on your desktop. Contrarily, others solutions only sync files that are stored inside a specific folder created for that purpose.
-
 Another interesting feature is \textbf{versioning}. File versioning allows users to restore previous versions of a file. Personal Clouds may limit the \textbf{version history} to a maximum number of revisions to be kept in the system or a specific period of time. For instance, a company could claim storing all versions of a file done in the last 30 days. This may also vary depending upon whether it is a free account or not.
 
 
@@ -130,91 +133,35 @@ Another interesting feature is \textbf{versioning}. File versioning allows users
 
 \begin{table}
 \begin{center}
-    \begin{tabular}{ | p{3.3cm} | p{1.4cm} | p{1.4cm} | p{2.4cm} | p{1.4cm} | p{2.9cm} | }
+    \begin{tabular}{ | p{3.3cm} | p{2cm} | p{2.9cm} | }
     \hline
     \rowcolor[gray]{0.8}
 
 	\textbf{Personal Cloud} &
-	\begin{sideways}\textbf{File syncing}\end{sideways} &
-	\begin{sideways}\textbf{Multiple folder syncing}\end{sideways} &
-	\begin{sideways}\textbf{P2P syncing}\end{sideways} & 
-	\begin{sideways}\textbf{Versioning}\end{sideways} & 
-	\begin{sideways}\textbf{Versions saved}\end{sideways} \\ \hline
+	\textbf{Versioning} & 
+	\textbf{Versions saved} \\ \hline
 
 	\textbf{Google Drive} &
-	Yes &
-	No &
-	No &
 	Yes &
 	30 days or 100 versions \\ \hline
 
 	\textbf{Dropbox} &
 	Yes &
-	No &
-	LAN restricted &
-	Yes &
 	30 days \\ \hline
 	
-	\textbf{Ubuntu One} &
-	Yes &
-	Yes &
-	No &
-	No &
-	--- \\ \hline
-	
 	\textbf{Box} &
-	Yes &
-	No & 
-	No &
 	Yes &
 	10 \\ \hline
 	
 	\textbf{SugarSync} & 
 	Yes &
-	Yes &
-	No &
-	Yes &
 	2 (free), 5 (paid) \\ \hline
 	
-	\textbf{Cubby} &
-	Yes &
-	Yes &
-	Yes &
-	Yes &
-	Unlimited \\ \hline
-	
-	\textbf{SkyDrive} & 
-	Yes &
-	No &
-	No &
+	\textbf{OneDrive} & 
 	Yes &
 	25 \\ \hline
-
-	\textbf{iCloud} &
-	Yes &
-	No &
-	No &
-	No &
-	--- \\ \hline
-	
-	\textbf{SpiderOak} & 
-	Yes &
-	Yes &
-	No &
-	Yes &
-	Unlimited \\ \hline
-
-	\textbf{Wuala} &
-	Yes &
-	Yes &
-	No &
-	Yes &
-	10 \\ \hline
 	
 	\textbf{ownCloud} &
-	Yes &
-	? &
-	No &
 	Yes &
 	? \\ \hline
 
@@ -225,21 +172,10 @@ Another interesting feature is \textbf{versioning}. File versioning allows users
 \end{table}
 }
 
-About half of the Personal Clouds implement multiple folder syncing. Cubby implements a protocol called \textit{DirectSync}~\cite{directsync} that bypasses the Cloud by using P2P technology for syncing files. Dropbox also has some sort of P2P syncing protocol \textit{LAN sync}~\cite{lansync} that syncs different computers inside the same local network. Again, there is a big discordance about the policy used when storing the file history.
-
-
-
-
 \subsection{Share}
 
 
 Sharing is an attractive feature that most of Personal Clouds provide, whether it is with users inside the service or with people outside the Personal Cloud. \textbf{Internal sharing} is usually offered as an integrated functionality in the user interface. Whereas \textbf{public sharing} is commonly offered as direct HTTP links that allow other users to access to certain files or folders.
-
-The sharing infrastructure must ensure \textbf{privacy-aware data sharing} from other Personal Clouds. It must also guarantee controlled access to external users and applications of oneâ€™s personal data.
-
-\textbf{Real-time collaboration} allows multiple users to edit a file at the same time. So users can see where in the document or file a particular editor is currently writing.
-
-\textbf{Interoperability} between Cloud providers gives users a sense of control and ownership over their Personal Cloud. Since the Personal Cloud is the mediation point between users and services, being able to easily withdraw from a particular Cloud provider increases ownership and control; the Personal Cloud feels truly personal, because the user is not â€œlocked inâ€ to one provider.
 
 
 {
@@ -247,92 +183,43 @@ The sharing infrastructure must ensure \textbf{privacy-aware data sharing} from 
 
 \begin{table}
 \begin{center}
-    \begin{tabular}{ | p{3.3cm} | p{1.5cm} | p{1.5cm} | p{1.5cm} | p{1.5cm} | p{1.5cm} | }
+    \begin{tabular}{ | p{3.3cm} | p{1.5cm} | p{1.5cm} | p{1.5cm} | }
     \hline
     \rowcolor[gray]{0.8}
 
 	\textbf{Personal Cloud} &
 	\begin{sideways}\textbf{Internal sharing}\end{sideways} &
 	\begin{sideways}\textbf{Public file sharing}\end{sideways} &
-	\begin{sideways}\textbf{Privacy-aware data sharing}\end{sideways} & 
-	\begin{sideways}\textbf{Collaborative editing}\end{sideways} & 
-	\begin{sideways}\textbf{Interoperability}\end{sideways} \\ \hline
+	\begin{sideways}\textbf{Collaborative editing}\end{sideways} \\ \hline
 
 	\textbf{Google Drive} &
 	Yes &
 	Yes &
-	No &
-	Yes &
-	No \\ \hline
+	Yes \\ \hline
 
 	\textbf{Dropbox} &
 	Yes &
 	Yes &
-	No &
-	No &
-	No \\ \hline
-	
-	\textbf{Ubuntu One} &
-	Yes &
-	Yes &
-	No &
-	No &
 	No \\ \hline
 	
 	\textbf{Box} &
 	Yes &
 	Yes &
-	No &
-	No &
 	No \\ \hline
 	
 	\textbf{SugarSync} & 
 	Yes &
 	Yes &
-	No &
-	No &
 	No \\ \hline
 	
-	\textbf{Cubby} &
+	\textbf{OneDrive} & 
 	Yes &
 	Yes &
-	No &
-	No &
-	No \\ \hline
-	
-	\textbf{SkyDrive} & 
-	Yes &
-	Yes &
-	No &
-	Yes &
-	No \\ \hline
-
-	\textbf{iCloud} &
-	Yes &
-	No &
-	No &
-	No &
-	No \\ \hline
-	
-	\textbf{SpiderOak} & 
-	Yes &
-	Yes &
-	Yes &
-	No &
-	No \\ \hline
-
-	\textbf{Wuala} &
-	Yes &
-	Yes &
-	Yes &
-	No &
-	No \\ \hline
+	Yes \\ \hline
 	
 	\textbf{ownCloud} &
 	Yes &
 	? &
-	No &
-	No &
 	No \\ \hline
 
     \end{tabular}
@@ -343,13 +230,8 @@ The sharing infrastructure must ensure \textbf{privacy-aware data sharing} from 
 }
 
 
-In table~\ref{tab:pc_sharing} we can see that only SpiderOak is considered to implement a privacy-aware data sharing scheme. SpiderOak allows users to password protect all their \textit{ShareRooms}\footnote{\url{https://spideroak.com/Online_File_Share}} so that only the people they want to give access to their data can view or download their shared files. Each share room has its own private, secure URL so users can easily share them with only the people they want.
 
-
-Only Google Drive and SkyDrive let multiple users collaborate simultaneously on the same file from any computer. When someone makes changes to a document, the other person can see the changes in real-time and respond to the edits immediately.
-
-Today, no Personal Cloud provides interoperability with other platforms.
-
+Only Google Drive and OneDrive let multiple users collaborate simultaneously on the same file from any computer. When someone makes changes to a document, the other person can see the changes in real-time and respond to the edits immediately.
 
 \subsection{Privacy}
 
