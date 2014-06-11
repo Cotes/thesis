@@ -229,9 +229,7 @@ Sharing is an attractive feature that most of Personal Clouds provide, whether i
 \end{table}
 }
 
-
-
-Only Google Drive and OneDrive let multiple users collaborate simultaneously on the same file from any computer. When someone makes changes to a document, the other person can see the changes in real-time and respond to the edits immediately.
+As we can see in table~\ref{tab:pc_sharing}, only Google Drive and OneDrive let multiple users collaborate simultaneously on the same file from any computer. When someone makes changes to a document, the other person can see the changes in real-time and respond to the edits immediately.
 
 \subsection{Privacy}
 
@@ -242,101 +240,58 @@ As a security measure, some companies store user data encrypted. Many Personal C
 
 Besides the fact of having the files secured when they are at rest in the server, it is also essential to assure their privacy when they are being transmitted to and from the server. Personal Clouds usually use \textbf{HTTPS} to communicate to their services either from the desktop application or other tools such as the REST APIs or the web interface.
 
-Services and applications offered by Personal Clouds are released in a variety of \textbf{licenses} in order to govern their use and redistribution. Licenses grant rights and impose restrictions on the use of software. Software licenses can generally be fit into the following categories: proprietary licenses and free and open source. The significant difference that distinguishes them is the terms which state whether or not an end user can further distribute or copy the software.
-
 
 {
 \def\arraystretch{1.5}
 
 \begin{table}
 \begin{center}
-    \begin{tabular}{ | p{3.3cm} | p{2.5cm} | p{1.2cm} | p{1.9cm} | p{1.2cm} | p{3.8cm} | }
+    \begin{tabular}{ | p{3.3cm} | p{2.5cm} | p{2.2cm} | p{2.2cm} | p{2cm} | }
     \hline
     \rowcolor[gray]{0.8}
 
 	\textbf{Personal Cloud} &
-	\begin{sideways}\textbf{Authorization protocol}\end{sideways} &
-	\begin{sideways}\textbf{Client-side encryption}\end{sideways} &
-	\begin{sideways}\textbf{Server-side encryption}\end{sideways} & 
-	\begin{sideways}\textbf{Secure channel (HTTPS)}\end{sideways} &
-	\begin{sideways}\textbf{License}\end{sideways} \\ \hline
+	\textbf{Authorization protocol} &
+	\textbf{Client-side encryption} &
+	\textbf{Server-side encryption} & 
+	\textbf{Secure channel (HTTPS)} \\ \hline
 	
 	\textbf{Google Drive} &
 	OAuth 2.0 &
 	No &
 	No &
-	Yes &
-	Proprietary \\ \hline
+	Yes \\ \hline
 
 	\textbf{Dropbox} &
 	OAuth 1.0 &
 	No &
 	Yes (AES 256-bit) &
-	Yes &
-	Proprietary \\ \hline
-	
-	\textbf{Ubuntu One} &
-	OAuth 1.0 &
-	No &
-	No &
-	Yes &
-	Proprietary (server); GPLv3 (client) \\ \hline
+	Yes \\ \hline
 	
 	\textbf{Box} &
 	OAuth 2.0 &
 	No &
 	Yes (AES 256-bit) &
-	Yes &
-	Proprietary \\ \hline
+	Yes \\ \hline
 	
 	\textbf{SugarSync} & 
 	Custom. Token-based &
 	No &
 	Yes (AES 128-bit) &
-	Yes &
-	Proprietary \\ \hline
+	Yes \\ \hline
 	
-	\textbf{Cubby} &
-	--- &
-	No &
-	Yes (AES 256-bit) &
-	Yes &
-	Proprietary \\ \hline
-	
-	\textbf{SkyDrive} & 
+	\textbf{OneDrive} & 
 	OAuth 2.0 &
 	No &
 	Yes &
-	Yes &
-	Proprietary \\ \hline
+	Yes \\ \hline
 
-	\textbf{iCloud} &
-	--- &
-	No &
-	Yes (AES 128-bit) &
-	Yes &
-	Proprietary \\ \hline
-	
-	\textbf{SpiderOak} & 
-	HTTP basic authentication &
-	Yes &
-	--- &
-	Yes &
-	Proprietary; GPLv3 (some tools) \\ \hline
-
-	\textbf{Wuala} &
-	--- &
-	Yes &
-	--- &
-	Yes &
-	Proprietary \\ \hline
 	
 	\textbf{ownCloud} &
 	--- &
 	No &
 	Yes &
-	Yes &
-	AGPLv3 \\ \hline
+	Yes \\ \hline
 
     \end{tabular}
     \caption{Personal Cloud comparison on privacy features}
