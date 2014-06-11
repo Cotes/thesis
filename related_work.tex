@@ -13,210 +13,26 @@ for handling activities and collaborations. Finally, a recent trend \cite{windle
 System that offers a core set of services around identity, trust, data access and 
 even programming models.
 
-In this paper, we focus on Personal Cloud Storage platforms that take care of data
+In this work, we focus on Personal Cloud Storage platforms that take care of data
 sync and sharing from heterogeneous devices. In fact,  the term ``Personal Cloud'' have
 received a lot of attention with the recent research reports from Forrester \cite{forrester}
 and Gartner \cite{gartner}. Like us, these reports associate the term Personal Cloud with
 online cloud storage services such as Dropbox, Box, or Google Drive among others.
 
-\section{Personal Cloud Systems}
+\section{State of the art review of existing Personal Clouds}
 
 In the last few years, we have seen how the market of cloud storage is growing rapidly. 
 Despite the rush to simplify our digital lives, many of the commercial Personal Clouds
 in operation today like Dropbox are \textit{proprietary}, and rely on algorithms that are
 \textit{invisible} to the research community, and what is even worse, existing open source
 alternatives fall short of addressing all the requirements of the Personal Cloud.
-Next we discuss the existing open source solutions for the Personal Cloud, namely
-SparkleShare, ownCloud and Syncany.
+Next we discuss the existing commercial and open source solutions for the Personal Cloud, namely
+Dropbox, Google Drive, Box, SugarSync and OneDrive, as commercial ones and 
+SparkleShare, ownCloud and Syncany, as open source solutions.
 
-SparkleShare\footnote{\url{http://sparkleshare.org/}} is built on top of Git, using it 
-as both its storage and syncing back-end. SparkleShare clients use push notification
-to receive changes, and maintain a direct connection with the server over SSH to exchange file data.
-When a client is started, it connects to a notification server. The notification server tells the other
-clients subscribed to that folder that they can pull new changes from the repository after a user
-change. 
-
-Using Git as the storage back-end is a double-edged sword. While Git implements an efficient request
-method to download changes from the server (git pull command), avoiding massive metadata exchanges
-between server and clients, it is not prepared to process large binary files. Also, this architecture
-tied to the Git protocol is also difficult to scale and deploy in cloud environments.
-
-ownCloud\footnote{\url{http://owncloud.org/}} is the most famous open source  Personal Cloud 
-and they have an active community. We refer here to the Community Edition of ownCloud, since their enterprise edition is not available to the public. In ownCloud, clients communicate with the server following a \textit{pull} strategy, i.e. clients ask periodically to the server for new changes. There are two types of data traffic: data and metadata. For data exchange, ownCloud uses a REST API; however, metadata traffic is transferred using the WebDAV protocol. 
-Because both types of traffic are processed by the same server, data and metadata traffic are completely coupled.
-
-Unfortunately, ownCloud is not an extensible and modular framework like StackSync. In this line, their developer community is mainly working around the web front-end. Although we will devote a subsection to ownCloud in the validation, we can advance that their inefficient pull strategy with massive control overheads is not scalable. Furthermore, their sync flows and data flows are tightly coupled, and they do not even provide basic chunking or deduplication mechanisms. 
-
-Syncany \footnote{\url{http://syncany.org/}} is an open source Personal Cloud developed by Philip Heckel in Java. It is a client-side Java application that can synchronise against a variety of storage back-ends thanks to their extensible plugin model. They also provide extensible mechanisms for chunking and their architecture is elegant, clean and modular.
-
-Although we give much credit to Syncany, proof of that is that the StackSync client is a branch project that evolved 
-from Syncany, it presents a number of drawbacks that made us evolve towards the current StackSync architecture. 
-The major shortcoming is the lack of scalability of Syncany due to its heavy pull strategy with metadata and
-data flows heavily coupled. To support versioning and resolve conflicts, Syncany relies on a metadata file 
-that contains the complete history of each individual file, and that is stored in the storage back-end
-as a regular file. To determine the most recent version of a file, the Syncany client needs first to
-download this metadata file, which grows with each new file modification, severely limiting scalability.
-
-\section{Synchronization Algorithms}
-
-At the core of personal cloud is file sync. Although a rush of online file sync services have
-been entering the market during the last years, evidenced by the explosion in popularity of
-Dropbox and competitors, little is known about the design and implementation of commercial
-sync protocols. According to a recent characterization of Dropbox~\cite{drago2012inside}, file synchronization
-is built upon third-party libraries such as librsync, but the role of this library is uncertain
-because of the very nature of the rsync algorithm~\cite{tridgell96rsync}. Other popular tools like 
-unison~\cite{unison} that use the same basic algorithm suffer from the same deficiencies.
-
-rsync is symmetric, and provides pairwise synchronization between two devices, where the rsync
-utility running on each computer must have local access to the entire file. This requirement
-poses the first practical limitation to the adoption of rsync because working at the file level
-prevents efficient data deduplication. To save storage space and money, services like Dropbox
-split files into chunks and store them at multiple nodes on the server side. A straightforward
-adaptation of rsync to this context would be piecing together the chunks and reconstructing
-whole file at a chosen server and then operate on it. This, unfortunately, would waste massive
-intra-cluster bandwidth, deteriorating significantly deduplication efficiency. It is worth
-noting here that, although rsync finds chunks of data that occur both in the old file and the
-new file, it requires the side acting as a server to compute hashes for all possible alignments
-in its file in order to find a match. For this, it needs the whole file.  
-
-In addition, if a single character is modified in each chunk of the old file, then no match
-will be found by the server and rsync will be completely useless~\cite{langford01}. To address this limitation,
-a number of single-round and multi-round protocols have been proposed in the last ten years. 
-Multi-round protocols allow communicating fewer bits in total by using additional communication
-rounds; see~\cite{langford01} and~\cite{suel04}. However, the fact of taking multiple passes over files presents evident
-disadvantages in terms of protocol complexity, computing and I/O overheads, and communication
-latency. Recent single-round protocols~\cite{irmak05}\cite{hao08} bypass this difficulty by using variable-length
-content-based chunking~\cite{Muthitacharoen01}. However, since these protocols only synchronize files between two
-different machines at a time, they are not directly applicable to Personal Clouds, where file
-changes occurring elsewhere are automatically notified to any other device sharing that file. 
-
-There is a large body of work by the OS community that attempts to detect redundancies in order
-to reduce storage or transmissions costs, like LFBS~\cite{Muthitacharoen01} and Pastiche~\cite{Cox02}, among others, which
-have inspired in one way or another many of today's online cloud storage services. These systems
-operate at block level by relying on variable-length content-based chunking, rather than at
-file level. Compared with personal cloud applications, distributed file systems pursue a
-different objective and can skip implementing some basic functionality in personal clouds like
-file version management or the scalable notification of updates as soon as they occur. In fact,
-LBFS uses leases in which the server's obligation to inform a client of changes expires after one
-minute. The result is that the client will be out of sync once a lease on a file has expired. 
-In Dropbox, however, any change on the central storage is advertised as soon as it is made~\cite{drago2012inside}.
-For this purpose, the Dropbox client keeps continuously opened a TCP connection to a notification
-server, used for receiving information about changes performed elsewhere.
-
-Overall, \textit{providing an efficient and scalable sync protocol} poses a grand challenge for
-engineers in charge of building Personal Cloud storage services, due to the intricate
-relationships between deduplication, notification and metadata management.
-
-%Making this process scalable is not straightforward, as it involves the intricate interaction of many components. For
-%instance, to improve scalability, Personal Clouds use numerous techniques to only transfer those parts of the
-%files that have been modified since the last synchronization. To achieve this, these systems internally do not
-%use the concept of files, but split every file into chunks, each treated as an independent object. If a chunk
-%is already stored in the storage servers, it is not transferred, saving traffic and storage. However, working
-%at the chunk level requires the sync process to manage more metadata than operating at the file level, making
-%it more critical the way metadata is internally processed. Further, as the amount of metadata is directly proportional
-%to the number of chunks, the efficiency of the chunking algorithm impacts the performance of file syncing.
-
-Analogously, to efficiently maintain the consistency of files, any change performed elsewhere must be advertised 
-as soon as they occur to reduce conflicts~\cite{drago2012inside}, in particular, when a file is susceptible to
-be modified by more than one client at the same time. This requires the sync process to operate quickly to
-commit changes along with an efficient notification service to inform clients about file modifications. 
-
-Therefore, a practical implementation of an open Personal Cloud requires making a big effort. In 
-this context, the CloudSpaces project (\url{ http://cloudspaces.eu/}) , which has been initiated
-in the frame of European Commission's FP7-ICT programme, is attempting to fill this gap. Concretely,
-as far as we know, we are the first to propose an open architecture for Personal Clouds. It is worth
-noting here that although at the time of this writing, our reference implementation includes the
-software necessary to run a basic Personal Cloud, in this work we put more emphasis on the sync protocol, which
-is the core service of any Personal Cloud. Since a serious impediment to progress in cloud storage
-research is the lack of a standard framework, we hope to provide a useful framework for developing
-and testing new ideas in a relatively easy manner.
-
-In summary, we contribute the following:
-
-\begin{enumerate}
-\item Extensible framework with a plugin-based architecture for  storage back-ends, metadata-back-ends,
- communication middleware, and chunking  algorithms.
-\item Reference open source implementation called StackSync, which is based on a high-performance messaging middleware 
-for asynchronously dispatching incoming and outgoing push notifications.
-\item Benchmarking and validation framework for Personal Clouds, which provides trace generators and test scripts. 
-
-\end{enumerate}
-
-
-The rest of the article is structured as follows. We review related work in Section 2. We give an
-overview of the main technical ingredients of a Personal Cloud in Section 3. We introduce our 
-open architecture in Section 4. In Section 5, we evaluate our reference implementation and conclude
-in Section 6.
-
-
-\section{From the Personal Computer to the Personal Cloud}
-
-In the last few years, the Personal Computer (PC) paradigm has been slowly waning as traditional PCs have been outnumbered by other devices like smartphones and tablets. The traditional PC as the users' unique device including a box with a monitor, mouse, and keyboard is coming to an end.  In the next years, users will access their digital lives from a variety of heterogeneous devices like TVs, smartphones, tablets, laptops or even wearable computers.
-
-
-This change has profound implications in the way we interact with information. The Personal Computer implies that users have absolute control of their device's hardware and software.  What it is more important, user's personal data remains private as a direct consequence of  PC's local storage.  But this recent multi-device approach clearly implies access to Cloud resources that may compromise the privacy and control of user's  information.
-
-
-As stated in the title of this section, we refer to this new multi-device model as the Personal Cloud. The Personal Cloud model defines a ubiquitous storage facility enabling the unified and location-agnostic access to information flows from any device and application.  Ubiquitous free Cloud services like GMail, Facebook, Flickr, Dropbox, and many others permit users to access their personal information from any device and location.  But we pay a price for these services: the loss of control over our own data. In particular, the business models of most of these Cloud services relies on the monetization of user's data.
-
-
-On the other hand, several Cloud services (e.g. Wuala, MEGA, SpiderOak, Bitcasa, etc.) have emerged allowing the user to reclaim control over his data through client-side encryption. With most of these providers, the user further has the choice between keeping his data encrypted or sharing it in plain form with others. The latter option has the advantage of allowing data to be processed at the server side, thus enabling additional services (e.g. document editing, printing). Nevertheless, this approach of specifying a privacy policy per group of files is not convenient for most of the users, and this partially justifies the small user base of these services. The current solutions for privacy preservation are analogous to antivirus programs where the user has to scan each file or group of files manually and individually before using them. Most users would prefer to have the security analysis run in the most automatic and transparent manner possible. Along these lines, there are no Cloud solutions ensuring that the privacy of user's data is automatically guaranteed, with minimal intervention on his side.
-
-
-In addition, we are facing a decisive battle to decide who is going to store our data in the next years.  In a recent report, Forrester research forecasts a market of \$12 billion in the US in paid subscriptions to personal storage services by 2016~\cite{forrester}. In this line, we are witnessing a generalized battle of Cloud providers to store our information: ranging from Dropbox, Box, SugarSync and Ubuntu One, to Apple's iCloud, Microsoft Skydrive and Google's Drive. These Store Wars represent  a battle for supremacy that create walled gardens environments favouring vendor lock-in and precluding interoperability.
-
-
-But the future is not that bleak. The Personal Cloud model with all its advantages can be realized without relinquishing our privacy or requiring a significant effort and expertise.  The CloudSpaces project aims to create the next generation of Personal Cloud where all users, regardless of their technical expertise, will retake control of their information. In the next sections we will try to present a clear definition of the Personal Cloud concept, and we will shed light on the current state of the art about Personal Clouds on the market.
-
-
-
-\section{Definition of Personal Cloud}
-
-First of all, we must propose a definition and classification for the concept of Personal Cloud.
-
-
-
-{
-%\def\arraystretch{2}
-
-\noindent\noindent\begin{tabularx}{\textwidth}{|m{0.9735\textwidth}|}
-\hline %horizontal line
- \rowcolor[gray]{.8}
-\textbf{3S Personal Cloud definition:} The Personal Cloud is a unified digital  locker for users' personal data offering three key services: Storage, Synchronization and Sharing.  On the one hand, it must provide redundant and trustworthy Cloud data storage for users' information flows irrespective of their type. On the other hand, it must provide syncing and file exploring capabilities in different heterogeneous platforms and devices. And finally, it must offer fine-grained information sharing to third-parties (users and applications).\\ \hline
-\end{tabularx}
-
-
-\bigskip
-We also include two external definitions:
-
-Respect Network's definition~\cite{respectnetwork}: A Personal Cloud is a Cloud-based virtual computer that combines event processing and personal data. Personal Clouds serve as the online representative of an entity, often a person. Personal Clouds have an operating system that runs applications, processes events, and manages data on behalf of and under the direct control of their owners. 
-
-
-PC Magazine Encyclopedia's definition~\cite{pcmag}: A small server in a home or small business network that can be accessed over the Internet. Designed for sharing photos and videos, Personal Clouds enable viewing and streaming from any Internet-connected personal computer and quite often from major smartphones. Although Personal Clouds function in a similar manner to any private Cloud set up in a company, their primary feature is easy installation for the average personal computer user.
-
-As we can see from the previous definitions there are still divergent views of what it is a Personal Cloud. Probably the most restrictive one is the PC Magazine definition which reduces the term to home-based small personal server resources.  On the contrary, the Respect Network definition is the most ambitious definition considering the term a Cloud-based virtual computer with both processing and data management capabilities. 
-
-The CloudSpaces 3S definition aims to provide a least common denominator for Personal Cloud Services. It goes further than classical Storage as a Service (STaaS) models because it mandates syncing and sharing as essential services. But it does not include computing or applications like the model envisioned by the Respect Network. In our model, applications will interact with the Personal Cloud thanks to interoperability standards.
-
-
-The actual implementation of the Personal Cloud can be realized using different architectures such as a public Cloud, a private Cloud, or even a hybrid Cloud. Furthermore, the name â€œPersonalâ€ should not be misunderstood: the Personal Cloud is not only aimed for end-userâ€™s private digital information, but it can also refer to enterprise data and professional activities.
-
-
-We cannot say that a Personal Cloud can be classified as  IaaS (Infrastructure as a Service), SaaS (Software as a Service), or PaaS (Platform as a Service), because we consider that the three of them can also be included in the Personal Cloud model. For example, providers such as Dropbox, U1 or Box tend to offer storage APIs to third party applications (IaaS). And such providers also offer web-based rich interfaces to their stores (SaaS). Finally, although less prevalent today, Personal Clouds could offer richer PaaS services to third-party applications willing a more flexible interaction with their data (e.g. U1DB data store or the â€œCloudletsâ€ concept~\cite{openi}).
-
-
-Finally, depending on their implementation of sync and share features, we can classify Personal Clouds as oriented to \textbf{content collection},  \textbf{distribution}, or  \textbf{collaboration}. Collaborative Personal Clouds must provide advanced sync (versioning, conflict resolution) and sharing (access  control) capabilities to permit treating Personal Cloud spaces as collaborative workspaces. Here, we summarise these three purposes.
-
-....
-....
-
-....
-....
-
-\section{State of the art review of existing Personal Clouds}
-
-
-Before beginning with Personal Cloud comparison we will introduce some important concepts and provide definitions of the main aspects that will be analysed. To clarify, we will classify features into the following sections:
+Before beginning with Personal Cloud comparison we will introduce some important concepts
+and provide definitions of the main aspects that will be analysed. To clarify, we will
+classify features into the following sections:
 
 \begin{itemize}
 \item \textbf{Storage}. We will take into account features such as Personal Cloud's infrastructure or whether they use advanced techniques such as data deduplication.
@@ -239,10 +55,6 @@ Some Personal Clouds apply restrictions on the \textbf{maximum file size}, which
 
 In order to optimize the storage and bandwidth consumed when maintaining different versions of files some Personal Clouds use \textbf{data deduplication} techniques. Using data deduplication, when a user is to upload a file that already exists in the Cloud, he will not need to actually transfer it. Instead, a logical relation between the file and the user will be created. This technique can be applied to different scopes (i.e. across all files in the system, across user's files, etc.) depending on the privacy policy.
 
-Such popular services need to scale well in order to be successful. A system is said to be \textbf{scalable} when it is able to accommodate a significant growth in its amount of work and continue its normal functioning. This feature is normally inherited by the storage backend that underlies the service.
-
-
-
 \begin{table}
 \begin{center}
     \begin{tabular}{ | p{3.4cm} | p{2.0cm} | p{2.6cm} | p{2.6cm} | p{1.0cm} | p{1.0cm} | }
@@ -253,84 +65,43 @@ Such popular services need to scale well in order to be successful. A system is 
 	\begin{sideways}\textbf{Nature}\end{sideways} &
 	\begin{sideways}\textbf{Free storage}\end{sideways} &
 	\begin{sideways}\textbf{File size limit}\end{sideways} & 
-	\begin{sideways}\textbf{Deduplication}\end{sideways} & 
 	\begin{sideways}\textbf{Scalable}\end{sideways} \\ \hline
 
 	\textbf{Google Drive} &
 	Private &
 	5 GB &
 	10 GB &
-	No &
 	Yes \\ \hline
 
 	\textbf{Dropbox} &
 	Public (Amazon S3) &
 	2 GB &
 	300 MB (web only) &
-	Yes &
 	Yes \\ \hline
 	
-	\textbf{Ubuntu One} &
-	Public (Amazon S3) &
-	5 GB &
-	Unlimited &
-	Yes &
-	Yes \\ \hline
 	
 	\textbf{Box} &
 	Private &
 	5 GB & 
 	250 MB (free acounts) &
-	? &
 	Yes \\ \hline
 	
 	\textbf{SugarSync} & 
 	Public (Carpathia Hosting) &
 	5 GB &
 	Unlimited &
-	? &
 	Yes \\ \hline
 	
-	\textbf{Cubby} &
-	Private &
-	5 GB &
-	2 GB (web only) &
-	No &
-	Yes \\ \hline
-	
-	\textbf{SkyDrive} & 
+	\textbf{OneDrive} & 
 	Private &
 	7 GB &
 	2 GB (client), 300 MB (web) &
-	? &
-	Yes \\ \hline
-
-	\textbf{iCloud} &
-	Private &
-	5 GB &
-	? &
-	? &
-	Yes \\ \hline
-	
-	\textbf{SpiderOak} & 
-	Private &
-	2 GB &
-	Unlimited &
-	Yes &
-	Yes \\ \hline
-
-	\textbf{Wuala} &
-	Private &
-	5 GB &
-	40 GB &
-	Yes &
 	Yes \\ \hline
 	
 	\textbf{ownCloud} &
 	Private &
 	Customizable &
 	Customizable &
-	No &
 	No \\ \hline
 
     \end{tabular}
@@ -874,3 +645,132 @@ Being able to access to users' stored data from a web browser is an essential fu
 Wuala provides a limited API only supporting GET operations, it does not include any login or write facilities. Cubby and ownCloud, which do not provide a REST API, implement support for the WebDAV protocol. Though, Cubby has certain limitations such as not being able to move or rename files.
 
 All analysed Personal Clouds have a web interface and most of them have clients for the main operating systems and mobile devices, which allow users to easily interact with their files. However, iCloud is mainly restricted to Apple's products.
+
+\section{Personal Cloud Systems}
+
+In the last few years, we have seen how the market of cloud storage is growing rapidly. 
+Despite the rush to simplify our digital lives, many of the commercial Personal Clouds
+in operation today like Dropbox are \textit{proprietary}, and rely on algorithms that are
+\textit{invisible} to the research community, and what is even worse, existing open source
+alternatives fall short of addressing all the requirements of the Personal Cloud.
+Next we discuss the existing open source solutions for the Personal Cloud, namely
+SparkleShare, ownCloud and Syncany.
+
+SparkleShare\footnote{\url{http://sparkleshare.org/}} is built on top of Git, using it 
+as both its storage and syncing back-end. SparkleShare clients use push notification
+to receive changes, and maintain a direct connection with the server over SSH to exchange file data.
+When a client is started, it connects to a notification server. The notification server tells the other
+clients subscribed to that folder that they can pull new changes from the repository after a user
+change. 
+
+Using Git as the storage back-end is a double-edged sword. While Git implements an efficient request
+method to download changes from the server (git pull command), avoiding massive metadata exchanges
+between server and clients, it is not prepared to process large binary files. Also, this architecture
+tied to the Git protocol is also difficult to scale and deploy in cloud environments.
+
+ownCloud\footnote{\url{http://owncloud.org/}} is the most famous open source  Personal Cloud 
+and they have an active community. We refer here to the Community Edition of ownCloud, since their enterprise edition is not available to the public. In ownCloud, clients communicate with the server following a \textit{pull} strategy, i.e. clients ask periodically to the server for new changes. There are two types of data traffic: data and metadata. For data exchange, ownCloud uses a REST API; however, metadata traffic is transferred using the WebDAV protocol. 
+Because both types of traffic are processed by the same server, data and metadata traffic are completely coupled.
+
+Unfortunately, ownCloud is not an extensible and modular framework like StackSync. In this line, their developer community is mainly working around the web front-end. Although we will devote a subsection to ownCloud in the validation, we can advance that their inefficient pull strategy with massive control overheads is not scalable. Furthermore, their sync flows and data flows are tightly coupled, and they do not even provide basic chunking or deduplication mechanisms. 
+
+Syncany \footnote{\url{http://syncany.org/}} is an open source Personal Cloud developed by Philipp Heckel in Java. It is a client-side Java application that can synchronise against a variety of storage back-ends thanks to their extensible plugin model. They also provide extensible mechanisms for chunking and their architecture is elegant, clean and modular.
+
+Although we give much credit to Syncany, proof of that is that the StackSync client is a branch project that evolved 
+from Syncany, it presents a number of drawbacks that made us evolve towards the current StackSync architecture. 
+The major shortcoming is the lack of scalability of Syncany due to its heavy pull strategy with metadata and
+data flows heavily coupled. To support versioning and resolve conflicts, Syncany relies on a metadata file 
+that contains the complete history of each individual file, and that is stored in the storage back-end
+as a regular file. To determine the most recent version of a file, the Syncany client needs first to
+download this metadata file, which grows with each new file modification, severely limiting scalability.
+
+\section{Synchronization Algorithms}
+
+At the core of personal cloud is file sync. Although a rush of online file sync services have
+been entering the market during the last years, evidenced by the explosion in popularity of
+Dropbox and competitors, little is known about the design and implementation of commercial
+sync protocols. According to a recent characterization of Dropbox~\cite{drago2012inside}, file synchronization
+is built upon third-party libraries such as librsync, but the role of this library is uncertain
+because of the very nature of the rsync algorithm~\cite{tridgell96rsync}. Other popular tools like 
+unison~\cite{unison} that use the same basic algorithm suffer from the same deficiencies.
+
+rsync is symmetric, and provides pairwise synchronization between two devices, where the rsync
+utility running on each computer must have local access to the entire file. This requirement
+poses the first practical limitation to the adoption of rsync because working at the file level
+prevents efficient data deduplication. To save storage space and money, services like Dropbox
+split files into chunks and store them at multiple nodes on the server side. A straightforward
+adaptation of rsync to this context would be piecing together the chunks and reconstructing
+whole file at a chosen server and then operate on it. This, unfortunately, would waste massive
+intra-cluster bandwidth, deteriorating significantly deduplication efficiency. It is worth
+noting here that, although rsync finds chunks of data that occur both in the old file and the
+new file, it requires the side acting as a server to compute hashes for all possible alignments
+in its file in order to find a match. For this, it needs the whole file.  
+
+In addition, if a single character is modified in each chunk of the old file, then no match
+will be found by the server and rsync will be completely useless~\cite{langford01}. To address this limitation,
+a number of single-round and multi-round protocols have been proposed in the last ten years. 
+Multi-round protocols allow communicating fewer bits in total by using additional communication
+rounds; see~\cite{langford01} and~\cite{suel04}. However, the fact of taking multiple passes over files presents evident
+disadvantages in terms of protocol complexity, computing and I/O overheads, and communication
+latency. Recent single-round protocols~\cite{irmak05}\cite{hao08} bypass this difficulty by using variable-length
+content-based chunking~\cite{Muthitacharoen01}. However, since these protocols only synchronize files between two
+different machines at a time, they are not directly applicable to Personal Clouds, where file
+changes occurring elsewhere are automatically notified to any other device sharing that file. 
+
+There is a large body of work by the OS community that attempts to detect redundancies in order
+to reduce storage or transmissions costs, like LFBS~\cite{Muthitacharoen01} and Pastiche~\cite{Cox02}, among others, which
+have inspired in one way or another many of today's online cloud storage services. These systems
+operate at block level by relying on variable-length content-based chunking, rather than at
+file level. Compared with personal cloud applications, distributed file systems pursue a
+different objective and can skip implementing some basic functionality in personal clouds like
+file version management or the scalable notification of updates as soon as they occur. In fact,
+LBFS uses leases in which the server's obligation to inform a client of changes expires after one
+minute. The result is that the client will be out of sync once a lease on a file has expired. 
+In Dropbox, however, any change on the central storage is advertised as soon as it is made~\cite{drago2012inside}.
+For this purpose, the Dropbox client keeps continuously opened a TCP connection to a notification
+server, used for receiving information about changes performed elsewhere.
+
+Overall, \textit{providing an efficient and scalable sync protocol} poses a grand challenge for
+engineers in charge of building Personal Cloud storage services, due to the intricate
+relationships between deduplication, notification and metadata management.
+
+%Making this process scalable is not straightforward, as it involves the intricate interaction of many components. For
+%instance, to improve scalability, Personal Clouds use numerous techniques to only transfer those parts of the
+%files that have been modified since the last synchronization. To achieve this, these systems internally do not
+%use the concept of files, but split every file into chunks, each treated as an independent object. If a chunk
+%is already stored in the storage servers, it is not transferred, saving traffic and storage. However, working
+%at the chunk level requires the sync process to manage more metadata than operating at the file level, making
+%it more critical the way metadata is internally processed. Further, as the amount of metadata is directly proportional
+%to the number of chunks, the efficiency of the chunking algorithm impacts the performance of file syncing.
+
+Analogously, to efficiently maintain the consistency of files, any change performed elsewhere must be advertised 
+as soon as they occur to reduce conflicts~\cite{drago2012inside}, in particular, when a file is susceptible to
+be modified by more than one client at the same time. This requires the sync process to operate quickly to
+commit changes along with an efficient notification service to inform clients about file modifications. 
+
+Therefore, a practical implementation of an open Personal Cloud requires making a big effort. In 
+this context, the CloudSpaces project (\url{ http://cloudspaces.eu/}) , which has been initiated
+in the frame of European Commission's FP7-ICT programme, is attempting to fill this gap. Concretely,
+as far as we know, we are the first to propose an open architecture for Personal Clouds. It is worth
+noting here that although at the time of this writing, our reference implementation includes the
+software necessary to run a basic Personal Cloud, in this work we put more emphasis on the sync protocol, which
+is the core service of any Personal Cloud. Since a serious impediment to progress in cloud storage
+research is the lack of a standard framework, we hope to provide a useful framework for developing
+and testing new ideas in a relatively easy manner.
+
+In summary, we contribute the following:
+
+\begin{enumerate}
+\item Extensible framework with a plugin-based architecture for  storage back-ends, metadata-back-ends,
+ communication middleware, and chunking  algorithms.
+\item Reference open source implementation called StackSync, which is based on a high-performance messaging middleware 
+for asynchronously dispatching incoming and outgoing push notifications.
+\item Benchmarking and validation framework for Personal Clouds, which provides trace generators and test scripts. 
+
+\end{enumerate}
+
+
+The rest of the article is structured as follows. We review related work in Section 2. We give an
+overview of the main technical ingredients of a Personal Cloud in Section 3. We introduce our 
+open architecture in Section 4. In Section 5, we evaluate our reference implementation and conclude
+in Section 6.
