@@ -1,6 +1,6 @@
-\chapter{Related Work}
+\chapter{Background and Related Work}
 
-\subsection{A Brief History of the Personal Cloud Term}
+\section{A Brief History of the Personal Cloud Term}
 
 In the past years there have been divergent views of the ``Personal Cloud'' concept.  
 For example, in \cite{hari2012personal} authors propose an architecture and design
@@ -19,7 +19,7 @@ received a lot of attention with the recent research reports from Forrester \cit
 and Gartner \cite{gartner}. Like us, these reports associate the term Personal Cloud with
 online cloud storage services such as Dropbox, Box, or Google Drive among others.
 
-\subsection{Personal Cloud Systems}
+\section{Personal Cloud Systems}
 
 In the last few years, we have seen how the market of cloud storage is growing rapidly. 
 Despite the rush to simplify our digital lives, many of the commercial Personal Clouds
@@ -57,7 +57,7 @@ that contains the complete history of each individual file, and that is stored i
 as a regular file. To determine the most recent version of a file, the Syncany client needs first to
 download this metadata file, which grows with each new file modification, severely limiting scalability.
 
-\subsection{Synchronization Algorithms}
+\section{Synchronization Algorithms}
 
 At the core of personal cloud is file sync. Although a rush of online file sync services have
 been entering the market during the last years, evidenced by the explosion in popularity of
@@ -149,7 +149,7 @@ open architecture in Section 4. In Section 5, we evaluate our reference implemen
 in Section 6.
 
 
-\subsection{From the Personal Computer to the Personal Cloud}
+\section{From the Personal Computer to the Personal Cloud}
 
 In the last few years, the Personal Computer (PC) paradigm has been slowly waning as traditional PCs have been outnumbered by other devices like smartphones and tablets. The traditional PC as the users' unique device including a box with a monitor, mouse, and keyboard is coming to an end.  In the next years, users will access their digital lives from a variety of heterogeneous devices like TVs, smartphones, tablets, laptops or even wearable computers.
 
@@ -170,7 +170,7 @@ But the future is not that bleak. The Personal Cloud model with all its advantag
 
 
 
-\subsection{Definition of Personal Cloud}
+\section{Definition of Personal Cloud}
 
 First of all, we must propose a definition and classification for the concept of Personal Cloud.
 
@@ -213,7 +213,7 @@ Finally, depending on their implementation of sync and share features, we can cl
 ....
 ....
 
-\subsection{State of the art review of existing Personal Clouds}
+\section{State of the art review of existing Personal Clouds}
 
 
 Before beginning with Personal Cloud comparison we will introduce some important concepts and provide definitions of the main aspects that will be analysed. To clarify, we will classify features into the following sections:
@@ -227,7 +227,7 @@ Before beginning with Personal Cloud comparison we will introduce some important
 \end{itemize}
 
 
-\subsubsection{Storage}
+\subsection{Storage}
 
 Personal Cloud companies offer sophisticated storage services to end-users and enterprises by making use of raw storage. This \textbf{storage backend} is often provided by data center owners such as Amazon or Rackspace. However, some other Personal Clouds do have their own infrastructure and do not outsource this task.
 
@@ -344,7 +344,7 @@ As we can see in table~\ref{tab:pc_storage}, most of the analysed Personal Cloud
 
 As far as we know, only Dropbox, SpiderOak, Ubuntu One and Wuala implement data deduplication mechanisms, but they differ on the scope where this technique is applied. Whereas Dropbox, Ubuntu One and Wuala deduplicate data across all users, SpiderOak only does it across a single user data due to privacy concerns. We assume that, due to the design of the storage backend, all services are scalable in the sense that they can fetch more resources as the demand increases. We don't consider ownCloud to be scalable since it is designed as a local repository.
 
-\subsubsection{Sync}
+\subsection{Sync}
 One of the key aspects of Personal Clouds is \textbf{file synchronization} (or syncing). We understand it as a two-way file synchronization, which means that a locally modified file is updated in each location this file is present. In addition, if a file is modified remotely, these changes will be automatically updated locally, with the purpose of keeping every copy of a file identical in all locations.
 
 In this line, some companies also implement \textbf{P2P file syncing}. We understand P2P file syncing as the ability to keep two or more files identical in different locations without resorting to a central service. It allows companies to reduce the outgoing traffic from the data center, which translates in cost savings. It is also useful for users that want to store the same files on two or more computers avoiding the need to resort to the server.
@@ -459,7 +459,7 @@ About half of the Personal Clouds implement multiple folder syncing. Cubby imple
 
 
 
-\subsubsection{Share}
+\subsection{Share}
 
 
 Sharing is an attractive feature that most of Personal Clouds provide, whether it is with users inside the service or with people outside the Personal Cloud. \textbf{Internal sharing} is usually offered as an integrated functionality in the user interface. Whereas \textbf{public sharing} is commonly offered as direct HTTP links that allow other users to access to certain files or folders.
@@ -580,7 +580,7 @@ Only Google Drive and SkyDrive let multiple users collaborate simultaneously on 
 Today, no Personal Cloud provides interoperability with other platforms.
 
 
-\subsubsection{Privacy}
+\subsection{Privacy}
 
 
 Personal Clouds must ensure that user data is not accessed by third-parties and only authenticated users are granted access. Some companies use standard \textbf{authentication protocols} such as OAuth~\cite{oauth}, others opt for using their own mechanisms.
@@ -702,7 +702,7 @@ Only ownCloud is fully available in a free open source license. Ubuntu One, thou
 
 
 
-\subsubsection{Platforms}
+\subsection{Platforms}
 
 
 In order to access to user data from an external application, Personal Clouds must implement an application programming interface (API). Providing a \textbf{public API} allows developers to integrate their application on top of the storage system. When used in the web environment, an API is typically defined as a set of HTTP request messages and XML or JSON response messages, also known as REST API.
