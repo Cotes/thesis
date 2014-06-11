@@ -63,11 +63,11 @@ Such popular services need to scale well in order to be successful. A system is 
     \rowcolor[gray]{0.8}
 
 	\textbf{Personal Cloud} &
-\textbf{Nature} &
-\textbf{Free storage} &
-\textbf{File size limit} & 
-\textbf{Dedup.} & 
-\textbf{Scalable} \\ \hline
+	\textbf{Nature} &
+	\textbf{Free storage} &
+	\textbf{File size limit} & 
+	\textbf{Dedup.} & 
+	\textbf{Scalable} \\ \hline
 
 	\textbf{Google Drive} &
 	Private &
@@ -366,19 +366,16 @@ showspaces=false,
 showstringspaces=false}
 
 
-In this section we will introduce StackSync, an scalable open source software framework that implements the basic components to create a synchronization tool.
-
-In general terms, StackSync can be divided into four main blocks: clients, synchronization service, storage service, and communication middleware. An overview of the architecture with the main components and their interaction is shown in Figure~\ref{fig:architecture_no_api}. The
+In general terms, StackSync can be divided into four main blocks: clients, synchronization service, storage service, and communication middleware. An overview of the architecture with the main components and their interaction is shown in Figure~\ref{fig:architecture}. The
 StackSync client and the sync service interact through the communication middleware called ObjectMQ. The sync service interacts with the
 metadata database. The StackSync client directly interacts with the storage
 back-end to upload and download files.
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.55\textwidth]{figures/stacksync_arch_no_api}
-\caption{StackSync architecture overview}\label{fig:architecture_no_api}
+\includegraphics[width=0.55\textwidth]{figures/big_picture_v2}
+\caption{StackSync architecture overview}\label{fig:architecture}
 \end{figure}
-
 
 As we can see in the figure above, the storage back-end is separated from the rest of the architecture by a line. This means that StackSync can be used with external storage back-ends such as Amazon S3 or RackSpace. This enables StackSync to fit different organization requirements and be offered in three different configurations:
 
@@ -388,6 +385,25 @@ As we can see in the figure above, the storage back-end is separated from the re
 \item \textbf{Hybrid Cloud.} Data is stored in a public storage provider and metadata is kept inside the company’s infrastructure.
 \end{itemize}
 
+\subsection{StackSync Synchronization Protocol}
+
+Since file synchronization lies at the heart of any Personal Cloud service, 
+we present a reference synchronization protocol that is available in the StackSync framework,
+which is based on a \textit{message-oriented middleware} (MOM). In particular, 
+MOM is ideally suited here for:
+
+\begin{enumerate}
+\item \textit{Scalable change notification:} The high read-write ratio of Personal Cloud services makes
+it more appropriate to employ \textit{one-to-many push communication} for quickly notification.  
+Server-based protocols like this are required when replicas need a high degree of consistency \cite{Tanenbaum:2001:DSP:559404}.
+\item \textit{Asynchronous message dispatching:}  Synchronization operations require significant
+server processing time for ensuring consistency. Decoupling message dispatching from message
+processing in these scenarios  \cite{menasce2005mom} is important for scalability reasons.
+\item \textit{Implicit load balancing:} When many consumers read from a queue, messages are
+distributed among them. This way, we can start multipe
+instances of the \texttt{SyncService} to alleviate the load of the incoming request queue,
+\textit{allowing to scale up and down very easily as computing needs change}.
+\end{enumerate}
 
 
 \subsection{Desktop client and Storage back-ends}
