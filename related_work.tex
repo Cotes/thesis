@@ -303,15 +303,12 @@ As we observe in Table~\ref{tab:pc_privacy}, most Personal Clouds implement the 
 
 None of the Personal Clouds provide built-in client-side encryption. Unanimously, all services establish a secure channel between user's computer and the storage provider before data is transmitted. That way, no one can eavesdrop on the transfer.
 
-\section{Personal Cloud Systems}
+\section{Open Source Personal Cloud Systems}
 
-In the last few years, we have seen how the market of cloud storage is growing rapidly. 
-Despite the rush to simplify our digital lives, many of the commercial Personal Clouds
-in operation today like Dropbox are \textit{proprietary}, and rely on algorithms that are
-\textit{invisible} to the research community, and what is even worse, existing open source
-alternatives fall short of addressing all the requirements of the Personal Cloud.
-Next we discuss the existing open source solutions for the Personal Cloud, namely
-SparkleShare, ownCloud and Syncany.
+After studying the state-of-the-art of the exisiting Personal Clouds, we discuss in more detail
+the existing open source solutions.
+
+\subsection{SparkleShare}
 
 SparkleShare\footnote{\url{http://sparkleshare.org/}} is built on top of Git, using it 
 as both its storage and syncing back-end. SparkleShare clients use push notification
@@ -325,12 +322,14 @@ method to download changes from the server (git pull command), avoiding massive 
 between server and clients, it is not prepared to process large binary files. Also, this architecture
 tied to the Git protocol is also difficult to scale and deploy in cloud environments.
 
+\subsection{ownCloud}
 ownCloud\footnote{\url{http://owncloud.org/}} is the most famous open source  Personal Cloud 
 and they have an active community. We refer here to the Community Edition of ownCloud, since their enterprise edition is not available to the public. In ownCloud, clients communicate with the server following a \textit{pull} strategy, i.e. clients ask periodically to the server for new changes. There are two types of data traffic: data and metadata. For data exchange, ownCloud uses a REST API; however, metadata traffic is transferred using the WebDAV protocol. 
 Because both types of traffic are processed by the same server, data and metadata traffic are completely coupled.
 
 Unfortunately, ownCloud is not an extensible and modular framework like StackSync. In this line, their developer community is mainly working around the web front-end. Although we will devote a subsection to ownCloud in the validation, we can advance that their inefficient pull strategy with massive control overheads is not scalable. Furthermore, their sync flows and data flows are tightly coupled, and they do not even provide basic chunking or deduplication mechanisms. 
 
+\subsection{Syncany}
 Syncany \footnote{\url{http://syncany.org/}} is an open source Personal Cloud developed by Philipp Heckel in Java. It is a client-side Java application that can synchronise against a variety of storage back-ends thanks to their extensible plugin model. They also provide extensible mechanisms for chunking and their architecture is elegant, clean and modular.
 
 Although we give much credit to Syncany, proof of that is that the StackSync client is a branch project that evolved 
