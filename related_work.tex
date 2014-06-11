@@ -55,6 +55,8 @@ Some Personal Clouds apply restrictions on the \textbf{maximum file size}, which
 
 In order to optimize the storage and bandwidth consumed when maintaining different versions of files some Personal Clouds use \textbf{data deduplication} techniques. Using data deduplication, when a user is to upload a file that already exists in the Cloud, he will not need to actually transfer it. Instead, a logical relation between the file and the user will be created. This technique can be applied to different scopes (i.e. across all files in the system, across user's files, etc.) depending on the privacy policy.
 
+Such popular services need to scale well in order to be successful. A system is said to be \textbf{scalable} when it is able to accommodate a significant growth in its amount of work and continue its normal functioning. This feature is normally inherited by the storage backend that underlies the service.
+
 \begin{table}
 \begin{center}
     \begin{tabular}{ | p{3.4cm} | p{2.0cm} | p{2.6cm} | p{2.6cm} | p{1.0cm} | p{1.0cm} | }
@@ -112,8 +114,6 @@ In order to optimize the storage and bandwidth consumed when maintaining differe
 \end{table}
 
 As we can see in table~\ref{tab:pc_storage}, most of the analysed Personal Clouds use their own storage backend, others such as Dropbox or Ubuntu One rely on well-known storage providers such as Amazon to store users' data. Most Personal Clouds allow users to increase their free storage by referring friends to their service. We can also observe that there is a huge difference on the limit set to file sizes. OwnCloud lets administrators assign custom values for storage space and file size limit.
-
-As far as we know, only Dropbox, SpiderOak, Ubuntu One and Wuala implement data deduplication mechanisms, but they differ on the scope where this technique is applied. Whereas Dropbox, Ubuntu One and Wuala deduplicate data across all users, SpiderOak only does it across a single user data due to privacy concerns. We assume that, due to the design of the storage backend, all services are scalable in the sense that they can fetch more resources as the demand increases. We don't consider ownCloud to be scalable since it is designed as a local repository.
 
 \subsection{Sync}
 One of the key aspects of Personal Clouds is \textbf{file synchronization} (or syncing). We understand it as a two-way file synchronization, which means that a locally modified file is updated in each location this file is present. In addition, if a file is modified remotely, these changes will be automatically updated locally, with the purpose of keeping every copy of a file identical in all locations.
