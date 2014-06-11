@@ -340,6 +340,216 @@ that contains the complete history of each individual file, and that is stored i
 as a regular file. To determine the most recent version of a file, the Syncany client needs first to
 download this metadata file, which grows with each new file modification, severely limiting scalability.
 
+\subsection{What to choose?}
+As explained before, none of the current open source solutions fits well in a Personal Cloud definition.
+For this reason, we decided to create StackSync, an open framework for Personal Cloud systems. Its architecture is
+highly modular, with each module represented by a well-defined API, allowing third parties to replace components
+for innovation in versioning, deduplication, live synchronization or continuous reconciliation, among other
+relevant topics.
+
+\section{StackSync}
+
+\lstset{language=Java,
+basicstyle=\ttfamily\footnotesize,
+keywordstyle=\color{javapurple}\bfseries,
+stringstyle=\color{javared},
+commentstyle=\color{javagreen},
+morecomment=[s][\color{javadocblue}]{/**}{*/},
+numbers=left,
+numberstyle=\footnotesize\color{black},
+stepnumber=1,
+numbersep=10pt,
+backgroundcolor=\color{black!5},
+frame=single,
+tabsize=4,
+showspaces=false,
+showstringspaces=false}
+
+
+In this section we will introduce StackSync, an scalable open source software framework that implements the basic components to create a synchronization tool.
+
+In general terms, StackSync can be divided into four main blocks: clients, synchronization service, storage service, and communication middleware. An overview of the architecture with the main components and their interaction is shown in Figure~\ref{fig:architecture_no_api}. The
+StackSync client and the sync service interact through the communication middleware called ObjectMQ. The sync service interacts with the
+metadata database. The StackSync client directly interacts with the storage
+back-end to upload and download files.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.55\textwidth]{figures/stacksync_arch_no_api}
+\caption{StackSync architecture overview}\label{fig:architecture_no_api}
+\end{figure}
+
+
+As we can see in the figure above, the storage back-end is separated from the rest of the architecture by a line. This means that StackSync can be used with external storage back-ends such as Amazon S3 or RackSpace. This enables StackSync to fit different organization requirements and be offered in three different configurations:
+
+\begin{itemize}
+\item \textbf{Public Cloud.} Data and metadata is stored in a public storage provider such as Amazon or Rackspace.
+\item \textbf{Private Cloud.} StackSync is installed on-premise. Data and metadata is stored on the company’s infrastructure.
+\item \textbf{Hybrid Cloud.} Data is stored in a public storage provider and metadata is kept inside the company’s infrastructure.
+\end{itemize}
+
+
+
+\subsection{Desktop client and Storage back-ends}
+
+The main StackSync client is a application that monitors local folders and synchronizes them with a remote repository. The StackSync client interacts with both the synchronization and storage services. The first one handles metadata communication, such as time stamps or file names, and the second one is in charge of raw data.
+
+
+This decoupling of sync control flows from data flows implies a user-centric design where the client directly controls its digital locker or storage container. The synchronization protocol have been designed to put the load in the client side, whereas the synchronization service just
+checks if the change is consistent, and then applies all changes proposed by clients.
+
+
+Every client has a local database and a process called \texttt{Watcher} that is responsible for monitoring the state of local folders that have been selected to be synchronized. If there is any change in the local repository, the \texttt{Watcher} notifies a process called \texttt{Indexer} which is responsible for sending these changes to the synchronization service. Besides that, the \texttt{Indexer} can also receive events from the synchronization service indicating that there was a change in the remote repository. These notifications are applied immediately into the local repository. Regarding potential
+conflicts due to offline operations, StackSync provides similar policies than Dropbox, so that we create a copy of the conflicted document and let the user decide about this.
+
+
+The client uses a chunking algorithm to split files into chunks before they are transmitted to the storage service. To save storage space and bandwidth, the StackSync client uses data deduplication at the chunk level so it only stores and transmits those chunks that have not been uploaded before. 
+
+
+Finally, and based on the original Syncany architecture, we provide an extensible plugin-based architecture for connecting to third-party Storage back-ends. We now provide plugins for Amazon S3, OpenStack Swift, Dropbox, WebDAV, SMB and FTP. However, we are focusing our efforts on OpenStack Swift, a highly available, distributed, eventually consistent object/blob store that guarantees service scalability.
+
+
+\subsection{Communication middleware}
+
+StackSync relies on a high-performance message broker compatible with the Advanced Message Queueing Protocol (AMQP)~\cite{amqp} standard. In order to simplify the interaction with this messaging middleware, we have built the ObjectMQ communication middleware.
+
+
+ObjectMQ is a lightweight remote object layer constructed on top of a messaging
+middleware. The current StackSync implementation relies on RabbitMQ~\cite{rabbitmq}, an open source message broker software that implements the AMQP standard. ObjectMQ combines RPC (Remote Procedure Call) and MOM (Message-oriented Middleware) models to devise four MOM-RPC invocation abstractions: two one-to-one calls (synchronous, asynchronous) and two one-to-many calls (multi, event).
+
+
+In general, objects receive method calls as messages in incoming queues, and then reply the results to clients in response queues. One-to-many calls are distributed using the appropriate AMQP Exchanges (broker message dispatchers). Recall that Exchanges determine message delivery and provide different delivery schemes, like direct (deliver this message to a particular queue) and publish-subscribe (deliver this message to all queues subscribed to a certain topic). 
+
+These are the four available calls:
+
+\begin{itemize}
+
+\item @async:  This is an asynchronous non-blocking  one-way invocation where the client  publishes a message in the target object request 
+Queue ($Q_{Request}$). By default, the client expects to receive no response and it is even not notified if the message was handled correctly.
+
+
+\item @sync:  This is a synchronous blocking remote call where the client publishes a message in the target object
+request Queue ($Q_{Request}$), blocking until a response is received in its own client response queue ($Q_{Response}$).  
+This call can be configured with a timeout and a number of retries to trigger the exception if the result does not arrive.
+
+\item @event:  This is an asynchronous non-blocking one-to-many notification triggered by a server.  The server triggers an @event by publishing the message in  the Event  fan-out Exchange ($E_{Event}$). Any client subscribing to this event in the server must bind their incoming Event Queue ($Q_{Event}$) to the server Exchange ($E_{Event}$).
+
+\item @multi: This is an asynchronous non-blocking one-to-many invocation from one client to many servers. The clients invokes the method in all servers by publishing an event in the Multi  fan-out Exchange ($E_{Multi}$). All servers bind their incoming Request Queue ($Q_{Request}$) to the Multi Exchange ($E_{Multi}$).
+   
+\end{itemize}
+
+The ObjectMQ communication middleware supports different compression and transport protocols (Kryo~\cite{kryo}, Java Serialization, JSON). It also handles transparently all the error management and communication services on top of the MOM broker. By creating this middleware, that the initial code of the StackSync client has been reduced in around $3,000$ lines of code.
+
+
+\subsection{Synchronization service and metadata back-end}
+
+The Sync service is a server-side component implemented as a remote object using the ObjectMQ communication middleware. This service directly benefits from the invocation abstractions offered by ObjectMQ. 
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.66\textwidth]{figures/message_broker}
+\caption{Message broker communication flow}\label{fig:message_broker}
+\end{figure}
+
+
+In Figure~\ref{fig:message_broker} we can observe the current design, ObjectMQ is using a global request queue for the SyncService, 
+a response queue for each device (Sync service Proxy), and a fan-out Exchange for each workspace.  
+
+Each device will bind its request queue to the appropriate workspace Exchange to receive notification changes in this workspace.  In any case, queue message programming is abstracted thanks to ObjectMQ, so that the protocol will be defined in terms of RPCs or method calls.
+
+
+\bigskip
+\begin{figure}[h!]
+	\begin{lstlisting}
+	@RemoteInterface
+	public interface SyncService extends Remote {
+
+    	@SyncMethod(retry = 5, timeout = 1500)
+    	public List<ObjectMetadata> getChanges(Workspace workspace);
+
+    	@SyncMethod(retry = 5, timeout = 1500)
+    	public List<Workspace> getWorkspaces();
+
+    	@AsyncMethod
+    	public void commitRequest(Workspace workspace, 
+    		List<ObjectMetadata> objectsChanged);
+
+	}
+	@event
+	public interface CommitEvent extends Event {
+		
+		public List<ObjectMetadata> objectsChanged getChanges();
+	}
+	
+		\end{lstlisting}
+		\caption{Sync service interface}
+		\label{fig:idl}
+\label{Code:push}
+\vspace{-10pt}
+\end{figure}
+
+
+In Figure~\ref{fig:idl} we can see the interface definition of the Sync service. Clients can request the list of Workspaces they have access to with the \texttt{getWorkspaces} operation. Once the client obtains the list of Workspaces, it can then perform two main operations: \texttt{getChanges} and  \texttt{commitRequest}. Furthermore, the client will be notified of changes  by means of the event \texttt{CommitEvent}.
+
+\texttt{getChanges} is a synchronous operation (@sync) that StackSync clients perform on startup. This is a costly operation for the Sync service as it returns the current state of a Workspace. Once the client receives this information, it registers its interest in receiving committed updates (i.e. \texttt{CommitEvent}s (@event) for this Workspace). From that point on, any change occurring on this Workspace will be notified to the client in a push style.
+
+\texttt{commitRequest} is an asynchronous operation (@async) that clients employ to inform the Sync service about detected file changes in their Workspaces.  This is a  costly operation since it must guarantee the consistency of data after the new changes. 
+
+\texttt{CommitEvent} is triggered by the Sync service in an asynchronous one-to-many operation (@event) to all out-of-sync devices in the specified Workspace. This operation is only launched by the Sync service once the changes has been correctly stored in the \texttt{Metadata back-end}.
+
+\begin{algorithm}[h]
+  \caption{Pseudocode of the commitRequest function in the Sync service}
+    \label{alg:commit_pseudocode}
+  \begin{algorithmic}[1]
+  	\footnotesize
+    \Function{commitRequest}{$workspace, List<ObjectMetadata> objects\_changed$}
+      \State $commit\_event \gets $ new instance of CommitEvent
+      \For{$new\_object$ \textbf{in} $objects\_changed$}
+      	\State $server\_object \gets metadata\_backend.get\_current\_version(new\_object.id)$
+        \If {\textbf{not exists} $server\_object$}
+          	\Comment To commit the first version of the new object
+        	\State $metadata\_backend.store\_new\_object(new\_object)$
+        	\State $commit\_event.add(new\_object, \mathtt{confirmed} = True)$
+        \ElsIf{$server\_object.version$ \textbf{precedes} $new\_object.version$}
+         	\\ \Comment No conflict, committing the new version
+			\State $metadata\_backend.store\_new\_version(new\_object)$
+			\State $commit\_event.add(new\_object, \mathtt{confirmed} =True)$
+        \Else
+        	\\
+        	\Comment Conflict detected, the current object metadata is returned
+        	\State $commit\_event.add(new\_object, \mathtt{confirmed} = False,  server\_object)$
+        \EndIf
+      \EndFor 
+      \State $trigger\_event(workspace, commit\_event)$
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}
+
+
+Algorithm~\ref{alg:commit_pseudocode} reports the pseudocode of the \texttt{commitRequest} operation. When a \texttt{commitRequest} message is received in the global request queue, the ObjectMQ middleware will invoke the appropriate \texttt{commitRequest} method in the \texttt{SyncService}. 
+
+
+This method then receives a proposed list of change operations in a concrete Workspace. For every change operation, it will then check if the current version of the object in the \texttt{Metadata back-end} precedes the change proposed by the client. In this case, the changes are (transactionally) stored in the Metadata back-end and confirmed in the \texttt{CommitEvent}. 
+
+If there is a conflict with versions, the \texttt{commitRequest} is set as failed and information about the current object version is added to the \texttt{CommitEvent}. The reason for adding the current object version to the \texttt{CommitEvent} is to piggyback the information about the ``differences'' between the two versions, such that the ``losing'' client can identify the missing chunks and reconstruct the object to the current version. 
+
+
+In StackSync, a conflict may occur when two users change a file at the same time. This implies that the two clients will propose a list of changes over the same version of the file. The first \texttt{commitRequest} to be processed will
+increase the version number by one, but the second \texttt{commitRequest} will inevitably propose a list of changes over a preceding version, resulting in a conflict. 
+
+To resolve the conflict, the Sync service adopts the simplest policy in this case, which is to consider as the ``winner''  the client whose \texttt{commitRequest} was processed first. This way, the Sync service
+avoids rolling back any update to the Metadata back-end, saving time and increasing scalability. At the client,
+the conflict is resolved by renaming the ``losing'' version of the file to ``...(conflicted copy)''.
+
+Finally, the \texttt{CommitEvent} will be triggered to the Workspace Exchange in message broker, and  it will be received by all interested devices in their incoming event queues. 
+
+Note that the \texttt{CommitRequest} is an important operation in the Sync service since it has to provide scalable request processing, consistency, and scalable change notification. Scalable request processing is achieved because the method is \textit{asynchronous} and \textit{stateless}. Multiple Sync service instances can listen from the global request queue and the message broker will transparently
+balance their load. Consistency is achieved using the transactional  ACID model of the underlying Metadata back-end. 
+Finally, scalable change notification to the interested parties is achieved using one-to-many push notifications (@event).
+
+The Sync service interacts with the Metadata back-end using an extensible DAO (Data Access Object). Our reference implementation is based on a PostgreSQL relational database although the system is modular and may be replaced easily.
+
+
 \section{Synchronization Algorithms}
 
 At the core of personal cloud is file sync. Although a rush of online file sync services have
