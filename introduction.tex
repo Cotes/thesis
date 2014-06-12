@@ -4,6 +4,22 @@ In the last few years, we have witnessed a clear shift from Personal Computers a
 
 \textit{The Personal Cloud is a unified digital  locker for our personal data offering three key services: Storage, Synchronization and Sharing.  On the one hand, it must provide redundant and trustworthy cloud data storage for our information flows irrespective of their type. On the other hand, it must provide syncing and file exploring capabilities in different heterogeneous platforms and devices. And finally, it must offer fine-grained information sharing to third-parties (users and applications).}
 
+However, despite their broad adoption, very little is known
+about the QoS of Personal Clouds and how providers implement their services. Furthermore,
+there is no public information about the control policies that
+Personal Clouds enforce, as well as the factors
+impacting on their service performance.
+
+The goal of this work is twofold. Firstly, we present a measurement study of various Personal Clouds.
+Concretely, during two months, we have actively measured the REST API service of Dropbox, Box and SugarSync
+\textit{free accounts}. We gathered information from more than $900,000$ storage operations, transferring
+around $70$TB of data. We analyzed important aspects to characterize their QoS.
+Secondly, we study how different providers tackle the problem of synchronizing files. For answering
+this question, we developed a realistic trace generator and extended a recent benchmarking tool proposed by
+\cite{drago2013benchmarking} to compare private solutions with StackSync, our open source Personal Cloud.
+
+\section{Motivation}
+
 Despite the much trumpeted success of the so-called cloud storage revolution, exemplified by Dropbox and the 
 likes, little is known about the architecture of these commercial solutions, and existing open source alternatives 
 (e.g., ownCloud\footnote{\url{ http://owncloud.org/ }}, SparkleShare\footnote{\url{ http://sparkleshare.org/}})
@@ -15,7 +31,22 @@ lies in great measure in the scalability of their sync services and sync protoco
 software typically keeps all the files in a specified folder in sync with the servers, automatically synchronizing changes across the devices of the same user. Since files can be shared with other users, changes in
 shared folders must be also synced with every account that has been given access to the shared folders.
 
-AQUI DECIR ALGO DE LAS TRAZAS Y DEL BENCHMARKING TOOL
+Therefore, a practical implementation of an open Personal Cloud requires making a big effort. In
+this context, the CloudSpaces project (\url{ http://cloudspaces.eu/}) , which was initiated
+in the frame of European Commission's FP7-ICT programme, attempted to fill this gap. Concretely,
+we developed StackSync, an open source Personal Cloud. Our reference implementation includes the
+software necessary to run a basic Personal Cloud, in this work we put more emphasis on the sync protocol, which
+is the core service of any Personal Cloud. Since a serious impediment to progress in cloud storage
+research is the lack of a standard framework, we hope to provide a useful framework for developing
+and testing new ideas in a relatively easy manner.
+
+After almost two years developing StackSync, we found the necessity to compare it with
+private and commercial solutions to understand how it performs. It was in that moment when we realized
+that it was impossible to find public traces from real users containing both the files and the history
+of modifications to those files that allowed us to evaluate our file-syncing service.
+
+Besides the traces, we also found the necessity to use a benchmarking framework for Personal Clouds, but the
+ones available were too simple and not enough to analize deeply their performance.
 
 \section{Problem statement}
 ...
