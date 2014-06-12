@@ -19,34 +19,35 @@ Unless otherwise noted, the proxy node hosted the \texttt{SyncService}, and the 
 
 Tables~\ref{table:services} and~\ref{table:clients} shows the software versions for the services and desktop clients used in the evaluation.
 
-\begin{table}[h]
-    \centering
-    \begin{tabular}{ | l | l | }
-    \hline
-    Service name & Version \\ \hline
-    OpenStack Swift & \textit{Havana} \\
-    RabbitMQ & 2.8.7 \\
-    PostgreSQL & 9.1 \\
-    SyncService & 0.4.4 \\ \hline
-    \end{tabular}
+\begin{table}[!htb]
+    \begin{minipage}{.5\linewidth}
+      \centering
+        \begin{tabular}{ | l | l | }
+    	\hline
+    	Service name & Version \\ \hline
+    	OpenStack Swift & \textit{Havana} \\
+    	RabbitMQ & 2.8.7 \\
+    	PostgreSQL & 9.1 \\
+    	SyncService & 0.4.4 \\ \hline
+    	\end{tabular}
     \caption{Used services version}
     \label{table:services}
-\end{table}
-
-\begin{table}
-    \centering
-    \begin{tabular}{ | l | l | }
-    \hline
-    Client name & Version \\ \hline
-    StackSync & 1.6.4 \\
-    Dropbox & 2.6.33 \\
-    Microsoft OneDrive & 17.0.4035.0328 \\
-    Amazon Cloud Drive & 2.4.2013.3290 \\ 
-    Google Drive & 1.15.6430.6825 \\ 
-    Box & 4.0.4925 \\ \hline
-    \end{tabular}
+    \end{minipage}%
+    \begin{minipage}{.5\linewidth}
+      \centering
+        \begin{tabular}{ | l | l | }
+    	\hline
+    	Client name & Version \\ \hline
+    	StackSync & 1.6.4 \\
+    	Dropbox & 2.6.33 \\
+    	Microsoft OneDrive & 17.0.4035.0328 \\
+    	Amazon Cloud Drive & 2.4.2013.3290 \\ 
+    	Google Drive & 1.15.6430.6825 \\ 
+    	Box & 4.0.4925 \\ \hline
+    	\end{tabular}
     \caption{Used desktop clients version}
     \label{table:clients}
+    \end{minipage} 
 \end{table}
 
 \section{Setup and Benchmarking Tool}
@@ -87,7 +88,7 @@ of training iterations; and $3$) number of snapshots. For our experiments, we se
 initial number of files to $20$, and the number of iterations and snapshots to $5$ and
 $100$, respectively. The resulting trace contained $940$ ADDs, $72$ UPDATEs and $228$ REMOVEs.
 The ADD operations generated a total data volume of $535.41$ MB whereas the UPDATEs only produced
-$\approx 14$ KB. The average file size was of $583$ KB. Fig.~\ref{fig:validation:cdf_files} plots
+$\approx 14$ KB. The average file size was of $583$ KB. Fig.~\ref{fig:cdf_files} plots
 the CDF of file size for our trace.
 
 Finally, to compare StackSync against other popular Personal Cloud services,
@@ -95,6 +96,14 @@ we modified the benchmarking tool developed by Drago et al.~\cite{drago2013bench
 conduct trace-driven experiments with the output of our generator. More specifically, we adapted
 their tool to measure the overhead of the different file syncing protocols under a sequence of
 ADD, UPDATE, and DELETE operations using real content.
+
+\begin{figure*}[t]
+  \centering
+  \label{fig:cdf_files}
+  \includegraphics[width=0.7\textwidth]{figures/cdf_files}
+  \vspace{-5pt}
+  \caption{File size vs file count distribution}
+\end{figure*}
 
 \section{Protocol Overhead}
 In this test, we compared the protocol overhead of StackSync with the overhead of the
@@ -104,11 +113,20 @@ $535.41$ MB. For this experiment, our benchmarking tool considered each of the o
 to measure the overhead accurately. That is, the next operation did not start until the current one was
 successfully committed.
 
-The results are shown in Fig.~\ref{fig:validation:overhead_clients}. As seen in this
+The results are shown in Fig.~\ref{fig:overhead_clients}. As seen in this
 figure, Dropbox exhibits the highest overhead, sending up to $150$ MB of additional
 unnecessary traffic. This results agree very well with other studies such as that
 of~\cite{li13}. On the contrary, StackSync has a low overhead, \textit{comparable to that of commercial
 Personal Cloud services such as OneDrive}.
+
+\begin{figure*}[t]
+  \centering
+  \label{fig:overhead_clients}
+  \includegraphics[width=0.7\textwidth]{figures/overhead_clients}
+  \caption{Overhead}
+  \vspace{-5pt}
+\end{figure*}
+
 
 To gain a deeper understanding of the overhead, we prepared a new variant of
 this test. In this new variant, we grouped all the actions of the same type to generate $3$ separate traces,
@@ -140,29 +158,13 @@ rest of the Personal Clouds.
 
 \begin{figure*}[t]
   \centering
-  \subfigure[File size vs file count distribution.]{
-    \label{fig:validation:cdf_files}
-    \includegraphics[width=0.3\textwidth]{figures/cdf_files}
-  }
-  \subfigure[Boxplots of synchronization time]{
-    \label{fig:validation:a}
-    \includegraphics[width=0.3\textwidth]{figures/fig10_2}
-  }
-  \subfigure[Synchronization time against file size]{
-    \label{fig:validation:b}
-    \includegraphics[width=0.3\textwidth]{figures/fig11}
-  }
-  \subfigure[Overhead]{
-    \label{fig:validation:overhead_clients}
-    \includegraphics[width=0.3\textwidth]{figures/overhead_clients}
-  }
   \subfigure[Control traffic overhead]{
     \label{fig:validation:actions_control}
-    \includegraphics[width=0.3\textwidth]{figures/actions_metadata}
+    \includegraphics[width=0.45\textwidth]{figures/actions_metadata}
   }
   \subfigure[Storage traffic overhead]{
     \label{fig:validation:actions_storage}
-    \includegraphics[width=0.3\textwidth]{figures/actions_storage}
+    \includegraphics[width=0.45\textwidth]{figures/actions_storage}
   }
   \caption{Performance of StackSync file-syncing protocol.}
   \vspace{-5pt}
@@ -197,7 +199,7 @@ was detected by the \texttt{Watcher} of the client that performed it until the l
 five clients were in sync. In the case of ADDs and UPDATEs, this time included the delay incurred
 to upload and download the unique chunks from the \texttt{Storage back-end}, hosted in our local cluster. 
 
-The results are depicted in Fig.~\ref{fig:validation:a}. As can be seen in the figure, all the operations take
+The results are depicted in Fig.~\ref{fig:synchronization_time:a}. As can be seen in the figure, all the operations take
 only a few seconds to have all the clients in sync, even in the case of the ADD operation where an appreciable
 amount of time is taken up to access the \texttt{Storage back-end}. Because the REMOVE operation does not trigger any data flow to and from the
 \texttt{Storage back-end}, the synchronization time becomes a good estimator of the processing time
@@ -208,19 +210,35 @@ a file removal in five clients is less than $2.6$ seconds, which is quite good, 
 \texttt{Metada back-end} is a SQL database.
 As a boxplot enables to assess the dispersion of a given distribution, 
 we gain important qualitative
-insights from Fig.~\ref{fig:validation:a}. One key observation is that the distribution of the
+insights from Fig.~\ref{fig:synchronization_time:a}. One key observation is that the distribution of the
 synchronization time for the UPDATE operation is right skewed, exhibiting file synchronization times
 significantly greater than the median value of $2.75$ seconds. This is evidenced~by
 the significant number of UPDATE operations exceeding the upper whisker. This skewness is explained
 by the use of fixed-size blocks, which suffer from the \textit{boundary shifting problem}~\cite{Eshghi05}.
 
 Since the time taken up by the ADD operation is affected by the file size, one interesting question
-is to assess how file size affects the synchronization time. Fig.~\ref{fig:validation:b} shows the synchronization
+is to assess how file size affects the synchronization time. Fig.~\ref{fig:synchronization_time:b} shows the synchronization
 time as a function of file size. As can be seen in the figure, \textit{the larger the file size, the longer
 the synchronization time}. However, what is most interesting is the fact that the increase in time
 is only linear when file size is larger than $2.5$ MBs, which indicates that for small files the
 time to transfer chunks from and to the \texttt{Storage back-end} is not significant compared
 with the time incurred by the tandem ObjectMQ-\texttt{SyncService}. 
+
+\begin{figure*}[t]
+  \centering
+  \subfigure[Boxplots of synchronization time]{
+    \label{fig:synchronization_time:a}
+    \includegraphics[width=0.45\textwidth]{figures/fig10_2}
+  }
+  \subfigure[Synchronization time against file size]{
+    \label{fig:synchronization_time:b}
+    \includegraphics[width=0.45\textwidth]{figures/fig11}
+  }
+	\caption{Performance of StackSync file-syncing protocol.}
+  \vspace{-5pt}
+  \label{fig:synchronization_time}
+\end{figure*}
+
 
 \section{Scalability and load-balancing}
 
