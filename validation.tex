@@ -1,4 +1,4 @@
-\chapter{Validation}
+\chapter{Benchmarking Personal Clouds Synchronization}
 
 In the evaluation of the reference implementation of StackSync framework, we set out to answer three basic questions: 
 $1$) \textit{How much overhead does the system need to support?} $2$) \textit{How much time is needed to have multiple devices in sync?}; and 
@@ -6,7 +6,11 @@ $3$) \textit{How does the system internally scale?}
 
 In some of these tests, we compare StackSync against other popular Personal Cloud services, including Dropbox, Microsoft OneDrive, Amazon Cloud Drive, Google Drive and Box.
 
-\section{Testbed}
+\section{Benchmark Methodology}
+
+\subsection{Benchmark Platform}
+
+\subsection{Testbed}
 
 For all the experiments, we used the following testbed. The testbed included a front-end server and several desktop 
 PCs acting as clients. The front-end was an OpenStack Swift deployment with one proxy node and $4$ storage nodes.  
@@ -50,7 +54,7 @@ Tables~\ref{table:services} and~\ref{table:clients} shows the software versions 
     \end{minipage} 
 \end{table}
 
-\section{Setup and Benchmarking Tool}
+\subsection{Setup and Benchmarking Tool}
 
 To evaluate the system, we developed a benchmarking tool to generate
 realistic workloads. We implemented this tool because we found no publicly available trace containing both 
@@ -105,7 +109,9 @@ ADD, UPDATE, and DELETE operations using real content.
   \label{fig:cdf_files}
 \end{figure*}
 
-\section{Protocol Overhead}
+\section{Results}
+
+\subsection{Protocol Overhead}
 In this test, we compared the protocol overhead of StackSync with the overhead of the
 commercial Personal Cloud services reported in Table~\ref{table:clients}. As in~\cite{drago2013benchmarking},
 we defined the overhead as the total storage and control traffic over the benchmark size, which was of 
@@ -187,7 +193,7 @@ rest of the Personal Clouds.
     \label{table:bundle}
 \end{table} 
 
-\section{Synchronization Time}
+\subsection{Synchronization Time}
 
 Another basic question to be examined is the delay experienced~by users to have their devices in sync. 
 To answer this question, we measured the time to synchronize $6$ clients for each type
@@ -238,7 +244,7 @@ with the time incurred by the tandem ObjectMQ-\texttt{SyncService}.
 \end{figure*}
 
 
-\section{Scalability and load-balancing}
+\subsection{Scalability and load-balancing}
 
 Finally, we performed an initial experiment to assess the scalability and load-balancing of 
 the StackSync platform. To this end, we performed stress tests generating $100$, $200$, and
@@ -279,14 +285,12 @@ way to future optimizations to fine tune the scalability of the overall service.
 
 
 
-\section{ownCloud Vs StackSync}
+\subsection{ownCloud Vs StackSync}
 
 In this first experiment we want to compare the metadata overhead produced by ownCloud and StackSync. As stated in the related work, ownCloud is using a pull-based approach based on the WEBDAV protocol. The ownCloud client discover changes by continuously pulling the server with WEBDAV PROPFIND requests for the root user folder every 30 seconds approximately. Each of these requests returns a XML file with a full list of the files and their associated metadata.
 
 
 Since the PROPFIND request only returns the metadata of the files in the same level, it will not contain change information of files or folders in the levels below. This implies that a change in a subfolder will trigger recursive PROPFIND requests in all the levels of the path. When the change is located in the subfolder, the client then performs a GET request to retrieve the file and stay synced with the rest of the clients.
-
-
 
 \begin{figure*}[t]
   \centering

@@ -1,6 +1,7 @@
 \chapter{Measuring Personal Clouds Services}
 
-From May $10$, $2012$, to July $15$, $2012$, we installed several
+\section{Measurement Methodology}
+During two months, we installed several
 vantage points in our university network (\textit{Universitat
 Rovira i Virgili}, Spain) and PlanetLab~\cite{planetlab}  
 to measure the performance of three of the major Personal Cloud services in the market: DropBox\footnote{\url{http://www.dropbox.com}}, Box\footnote{\url{http://www.box.net}} 
@@ -17,7 +18,7 @@ As a result of this process, and once the user has authorized
 that application to access his storage space, the Personal Cloud storage service
 gives to the developer an \textit{access token}. Including this \textit{access token} in each API call, the application can operate on the user data.
 
-There are two types of API calls: \textit{meta-info} and
+There are two types of API calls: \textit{metadata-info} and
 \textit{data management} calls. The former type refers to
 those calls that retrieve information about the state of the
 account (i.e., storage load, filenames), whereas the latter
@@ -28,7 +29,7 @@ of the most important data management calls: \texttt{PUT} and \texttt{GET},
 which serve to store and retrieve files.  
 
 
-\section{Measurement Platform} 
+\subsection{Measurement Platform} 
 
 We employed two different platforms
 to execute our tests: University laboratories and PlanetLab.
@@ -77,7 +78,7 @@ Location & Op. Type & Operations & Transferred Data \\ \hline
 \end{center}
 \end{table}
 
-\section{Workload Model} 
+\subsection{Workload Model} 
 
 Usually, Personal Cloud services impose file size 
 limitations to their REST interfaces, for
@@ -92,7 +93,7 @@ managing files of the same size.
 
 In next sections we present the executed worloads.
 
-\subsection{Up/Down Workload}
+\subsubsection*{Up/Down Workload}
 The objective of this workload
 was twofold: Measuring the maximum up/down transfer speed of operations
 and detecting correlations between the transfer speed and the load
@@ -108,7 +109,7 @@ That node uploaded files until the capacity of the account was full.
 At this point, that node downloaded all the files also in random order.
 After each download, the file was deleted. 
 
-\subsection{Service Variability Workload}
+\subsubsection*{Service Variability Workload}
 This workload maintained 
 in every node a nearly continuous upload and download transfer flow to analyze the performance 
 variability of the service over time. This workload provides an
@@ -141,7 +142,7 @@ was possible for the same period of time.
 We depict in Table \ref{tab:measurement_data} the total 
 number of storage operations performed during the measurement period.
 
-\section{Setup, Software and Data Collection}
+\subsection{Setup, Software and Data Collection}
 
 Prior to the start of our experiments, we created 
 around $150$ new user free accounts from the targeted Personal Clouds.
@@ -193,7 +194,8 @@ In this section, the transfer capacity of Box, DropBox and SugarSync is characte
 	 
 \end{itemize}
 
-\noindent\textbf{Transfer speeds}. Fig.~\ref{fig:transfer_mean_speeds_and_bw_distributions} 
+\subsubsection*{Transfer speeds}
+Fig.~\ref{fig:transfer_mean_speeds_and_bw_distributions} 
 reports these metrics for both workloads (up/down and service
 variability) executed in our university labs during $10$ days.
 First, Fig.~\ref{fig:transfer_mean_speeds_and_bw_distributions} 
@@ -267,7 +269,7 @@ the enforcement of more restrictive bandwidth control policies to
 the outbound traffic.
 \medskip
 
-\noindent\textbf{Transfers \& geographic location}. 
+\subsubsection*{Transfers \& geographic location}. 
 Next, we analyze transfer speeds depending
 on the geographic location of vantage points. 
 
@@ -398,7 +400,8 @@ study three potential factors, which are \textit{the size of file transfers};
 %\textbf{Transfers \& file size}. Regarding the first question, we analyze the role of the
 %file size in the API service based on \textit{transfer times} 
 %=======
-\noindent\textbf{Variability over file size}. We first investigate the role that 
+\subsubsection*{Variability over file size}.
+We first investigate the role that 
 file size plays on \textit{transfer times} 
 %>>>>>>> .r818
 and \textit{transfer speeds}. Fig. \ref{fig:transfer_times_and_speed_by_size}
@@ -495,7 +498,7 @@ Size 		& Provider & Min. & Q1 & Median & Q3 & Max. & Mean ($\mu$) & Std. Dev. ($
 
 \medskip
 
-\noindent\textbf{Variability over time}. We now analyze how the
+\subsubsection*{Variability over time}. We now analyze how the
 transfer speed varies over time. To better capture these variations, 
 we used the data from the \textit{service variability workload}, 
 which was aimed to maintain a constant transfer flow and was executed at our university labs.
