@@ -12,6 +12,8 @@ A level-1 auxiliary file: validation.aux
 A level-1 auxiliary file: conclusions2.aux
 The style file: plain.bst
 Database file #1: citations.bib
+Warning--I didn't find a database entry for "inside_dropbox"
+Warning--I didn't find a database entry for "allman1999tcp"
 Warning--to sort, need author or key in gartner
 Warning--to sort, need author or key in oauth
 Warning--to sort, need author or key in kryo
@@ -21,7 +23,7 @@ Too many commas in name 1 of "Songbin Liu, Xiaomeng Huang, Haohuan Fu, Guangwen 
 while executing---line 1090 of file plain.bst
 You've used 34 entries,
             2118 wiz_defined-function locations,
-            688 strings with 9300 characters,
+            690 strings with 9327 characters,
 and the built_in function-call counts, 12771 in all, are:
 = -- 1239
 > -- 589

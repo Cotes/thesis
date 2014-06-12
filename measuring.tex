@@ -1,4 +1,4 @@
-\chapter{Measuring Personal Clouds Methodology}
+\chapter{Measuring Personal Clouds Services}
 
 From May $10$, $2012$, to July $15$, $2012$, we installed several
 vantage points in our university network (\textit{Universitat
@@ -143,45 +143,6 @@ number of storage operations performed during the measurement period.
 
 \section{Results}
 
-\begin{figure}[t]
-  \subfigure[Download file MTS distributions.]
-{\label{fig:avg_down_file_transfer_speed}
-\includegraphics[width=0.45\textwidth]{figures/avg_down_file_transfer_speed_new.eps}}
-  \subfigure[Upload file MTS distributions.]
-{\label{fig:avg_up_file_transfer_speed}
-\includegraphics[width=0.45\textwidth]{figures/avg_up_file_transfer_speed_new.eps}}      
-  \subfigure[Download bandwidth distributions.]
-{\label{fig:down_bw_comparison}
-\includegraphics[width=0.45\textwidth]{figures/down_bw_comparison_new.eps}}
-  \subfigure[Upload bandwidth distributions.]
-{\label{fig:up_bw_comparison}
-\includegraphics[width=0.45\textwidth]{figures/up_bw_comparison_new.eps}}
- 
-   \caption{Transfer capacity of Box, DropBox and SugarSync free account REST API services.
-   The data represented in these figures corresponds to the aggregation
-   of the up/down and service variability workloads during $10$ days (June/July $2012$) in our university laboratories.}
-   \label{fig:transfer_mean_speeds_and_bw_distributions}
-%   \vspace{-4mm}
-\end{figure}
-
-\begin{figure*}
-\centering	
-  \subfloat[DropBox down. file MTS fitting ($150$MB files).]
-{\label{fig:qq_plot_dropbox_dmts}
-\includegraphics[width=0.325\textwidth]{dropbox_dw_150mb_fittings.eps}} 
- 	\subfloat[DropBox up. file MTS fitting ($150$MB files).]
-{\label{fig:qq_plot_dropbox_umts}
-\includegraphics[width=0.325\textwidth]{dropbox_up_150mb_fittings.eps}}
- 	\subfloat[Box down. file MTS fitting ($100$MB files).]
-{\label{fig:qq_plot_box_dmts}
-
-\includegraphics[width=0.325\textwidth]{box_dw_100mb_fittings.eps}}
-	\caption{Distribution fittings of upload/download file mean transfer speeds 
-	(MTS) of the examined Personal Clouds (up/down workload, university labs).}
-	\label{fig:qq_plot}
-	\vspace{-4mm}
-\end{figure*}
-
 \subsection{Transfer Capacity of Personal Clouds}
 %Transfer characterization: avg. transfer distributions, bandwidths distributions, times
 %Service variability depending on the day of the week
@@ -222,7 +183,26 @@ and Carpathia Hosting, respectively). On the other hand, Box claims to be owner 
 datacenters. In our view, it is interesting to analyze this 
 Cloud ecosystem and the possible implications to the service delivered to end-users.
 
-
+\begin{figure}[t]
+  \subfigure[Download file MTS distributions.]
+{\label{fig:avg_down_file_transfer_speed}
+\includegraphics[width=0.5\textwidth]{figures/avg_down_file_transfer_speed_new.eps}}
+  \subfigure[Upload file MTS distributions.]
+{\label{fig:avg_up_file_transfer_speed}
+\includegraphics[width=0.5\textwidth]{figures/avg_up_file_transfer_speed_new.eps}}      
+  \subfigure[Download bandwidth distributions.]
+{\label{fig:down_bw_comparison}
+\includegraphics[width=0.5\textwidth]{figures/down_bw_comparison_new.eps}}
+  \subfigure[Upload bandwidth distributions.]
+{\label{fig:up_bw_comparison}
+\includegraphics[width=0.5\textwidth]{figures/up_bw_comparison_new.eps}}
+ 
+   \caption{Transfer capacity of Box, DropBox and SugarSync free account REST API services.
+   The data represented in these figures corresponds to the aggregation
+   of the up/down and service variability workloads during $10$ days (June/July $2012$) in our university laboratories.}
+   \label{fig:transfer_mean_speeds_and_bw_distributions}
+   \vspace{-4mm}
+\end{figure}
 
 In this sense, in Fig. \ref{fig:transfer_mean_speeds_and_bw_distributions} we observe  
 that Personal Clouds apply \textit{distinct internal control policies}
@@ -246,7 +226,7 @@ they cover a wider range of values, specially for Box.
 As a possible explanation to this behavior, the experiments of Fig. \ref{fig:transfer_mean_speeds_and_bw_distributions} 
 were executed from our university labs (Spain) to exclude the impact of geographic heterogeneity. 
 Considering the fact that the majority of 
-Personal Cloud datacenters are located in USA~\cite{inside_dropbox}, 
+Personal Cloud datacenters are located in USA~\cite{drago2013benchmarking}, 
 this may have implications in the cost of the traffic sent to Europe. This could motivate
 the enforcement of more restrictive bandwidth control policies to
 the outbound traffic.
@@ -283,15 +263,12 @@ in SugarSync, irrespective of the geographic location.
 
 
 
-
-\begin{figure}
+\begin{figure}[h]
 \centering	
-  %\subfloat[Download MTS distribution.]
 {\label{fig:transfer_times_geographic_location_downloads}
-\includegraphics[width=0.31\textwidth]{geographic_location_downloads.eps}} \\
- 	%\subfloat[Upload MTS distribution.]
+\includegraphics[width=0.48\textwidth]{figures/geographic_location_downloads.eps}} 
 {\label{fig:transfer_times_geographic_location_uploads}
-\includegraphics[width=0.31\textwidth]{geographic_location_uploads.eps}}
+\includegraphics[width=0.48\textwidth]{figures/geographic_location_uploads.eps}}
 %\subfloat[-.]
 %{\label{fig:mean_upload_speed_distributions_by_file_size}
 %\includegraphics[width=0.24\textwidth]{mean_upload_speed_distributions_by_file_size.eps}}
@@ -302,11 +279,11 @@ in SugarSync, irrespective of the geographic location.
 	$2012$ depending on their geographic location (up/down workload).
 	Clearly, USA and Canada nodes exhibit faster transfers than European nodes.}
 	\label{fig:transfer_times_geographic_location}
-	\vspace{-1mm}
+	%\vspace{-1mm}
 \end{figure}
 
 
-\begin{table}%
+\begin{table}[h]
 \begin{center}
 \begin{tabular}{|l|l|l|l|l|}
 \hline
@@ -319,7 +296,7 @@ in SugarSync, irrespective of the geographic location.
  & $\tilde{D}_{MTS}/\tilde{U}_{MTS}$ & $0.190$ & $0.682$ & $2.387$ \\ \hline
 \end{tabular}
 \caption{Download/Upload transfer speed ratio of Personal Clouds depending on the client's geographic location.}
-\vspace{-11mm}
+\vspace{-5mm}
 \label{tab:down_up_ratio_location}
 \end{center}
 \end{table}
