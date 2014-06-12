@@ -12,6 +12,11 @@ Kryo: Fast, efficient java serialization and cloning.
 Oauth.
 \newblock \url{http://oauth.net/}.
 
+\bibitem{allman1999tcp}
+M.~Allman, V.~Paxson, W.~Stevens, et~al.
+\newblock Tcp congestion control.
+\newblock 1999.
+
 \bibitem{imc_rapidshare}
 Demetris Antoniades, Evangelos~P. Markatos, and Constantine Dovrolis.
 \newblock One-click hosting services: a file-sharing hideout.

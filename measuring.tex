@@ -141,6 +141,41 @@ was possible for the same period of time.
 We depict in Table \ref{tab:measurement_data} the total 
 number of storage operations performed during the measurement period.
 
+\section{Setup, Software and Data Collection}
+
+Prior to the start of our experiments, we created 
+around $150$ new user free accounts from the targeted Personal Clouds.
+That is $120$ new accounts for PlanetLab experiments ($40$ nodes
+$\times$ $3$ Personal Clouds), and $30$ accounts for the experiments
+in our labs ($10$ accounts per Personal Cloud deployed in $30$ machines). 
+We also registered as developers $35$ applications to access the storage
+space of user accounts via REST APIs, obtaining the necessary tokens
+to authenticate requests.
+We assigned to every node a single new free account with access permission
+to the corresponding application.
+The information of these accounts was stored in a database hosted in our research servers.
+Thus, nodes executing the measurement process were able to access the
+account information remotely. 
+
+Measurement processes were implemented as
+Unix and Python scripts that ran in every node. These scripts employed
+third party tools during their execution. For instance, to synchronize tasks, 
+such as logging and starting/finishing
+experiments, we used the \texttt{cron} time-based job scheduler.
+To gather bandwidth information we used
+\texttt{vnstat}, %\footnote{\url{http://humdi.net/vnstat/}}: 
+a tool that keeps a log of network 
+traffic for a selected interface. Nodes performed storage operations against Personal Clouds 
+thanks to the API implementations released in their websites. 
+
+The measurement information collected in each storage operation
+was sent periodically from every node 
+to a database hosted in our research servers. This automatic process
+facilitated the posterior data processing and exploration. The measurement information
+that nodes sent to the database describes several aspects of the service performance:
+operation type, bandwidth trace, file size, start/end time instants, 
+time zone, capacity and load of the account, and failure information.
+
 \section{Results}
 
 \subsection{Transfer Capacity of Personal Clouds}
@@ -301,6 +336,54 @@ in SugarSync, irrespective of the geographic location.
 \end{center}
 \end{table}
 
+\begin{figure}
+\centering	
+	\subfigure[Download transfer times CDF.]{
+  		\label{fig:down_transfer_times_by_size}
+		\includegraphics[width=0.45\textwidth]{figures/download_times_by_file_size.eps}
+	}
+ 	\subfigure[Upload transfer times CDF.]{
+ 		\label{fig:up_transfer_times_by_size}
+ 		\includegraphics[width=0.45\textwidth]{figures/upload_times_by_file_size.eps}
+ 	}
+	\caption{Transfer times distributions by file size.}
+	\label{fig:transfer_times_and_speed_by_size}
+	%\vspace{-4mm}
+\end{figure}
+
+
+\begin{table*}[t]
+%\hspace*{-40mm}
+\renewcommand{\arraystretch}{1}\addtolength{\tabcolsep}{-3pt}
+\tiny
+\centering
+\begin{tabular}{|p{0.65cm}|c|c|c|c|c|c|c|c|c|}
+\hline
+
+& & \multicolumn{8}{|c|}{Download File MTS Distribution (KBps)} \\
+
+\hline
+Size 		& Provider & Min. & Q1 & Median & Q3 & Max. & Mean ($\mu$) & Std. Dev. ($\sigma$) & CV ($\sigma/\mu$) \\ \hline
+\multirow{3}{*}{$25$MB} 
+ & DropBox & $24.89$ & $582.54$ & $624.152$ & $672.16$ & $970.90$ & $626.94$ & $71.23$ & $0.1136$  \\
+ & Box & $163.84$ & $397.19$ & $459.90$ & $534.99$ & $794.38$ & $463.72$ & $87.76$ & $0.0837$  \\
+ & SugarSync & $136.53$ & $198.59$ & $200.11$ & $201.65$ & $1048.57$ & $201.35$ & $37.89$ & $0.1882$  \\ \hline
+ 								
+\multirow{3}{*}{$50$MB} 
+ & DropBox & $210.56$ & $624.15$ & $663.66$ & $699.05$ & $888.62$ & $661.55$ & $58.02$ & $0.0877$   \\
+ & Box & $14.15$ & $623.16$ & $647.26$ & $672.16$ & $887.42$ & $646.22$ & $44.33$ & $0.0686$  \\
+ & SugarSync & $144.43$ & $200.88$ & $202.43$ & $204.00$ & $2496.61$ & $216.57$ & $149.28$ & $0.6893$  \\ \hline
+ 								
+\multirow{3}{*}{$100$MB} 
+ & DropBox & $25.09$ & $647.27$ & $676.50$ & $708.49$ & $1497.97$ & $680.32$ & $50.94$ & $0.0749$  \\
+ & Box & $14.43$ & $436.91$ & $487.71$ & $579.32$ & $1233.62$ & $507.82$ & $89.36$ & $0.0539$  \\ 
+ & SugarSync & $145.64$ & $202.03$ & $204.00$ & $205.20$ & $3744.91$ & $223.49$ & $219.50$ & $0.9822$  \\ \hline
+ 
+\end{tabular}
+\caption{Summary of download file MTS distributions by file size.}
+\label{tab:service_variability_file_size_download}
+\end{table*}
+
 
 \subsection{Variability of Transfer Performance}
 \label{sec:variability}
@@ -319,7 +402,7 @@ study three potential factors, which are \textit{the size of file transfers};
 file size plays on \textit{transfer times} 
 %>>>>>>> .r818
 and \textit{transfer speeds}. Fig. \ref{fig:transfer_times_and_speed_by_size}
-and Table \ref{tab:service_variability_file_size} report the results
+and Tables \ref{tab:service_variability_file_size_download} and \ref{tab:service_variability_file_size_upload} report the results
 for both metrics as function of file size, respectively. Unless otherwise
 stated, results reported in this subsection are based on executing the 
 up/down workload in our university labs during $5$ days.  
@@ -336,7 +419,7 @@ when transferring large files compared to small data files. This observation is 
 This leads us to the conclusion that these Personal Clouds
 \textit{do not perform aggressive bandwidth throttling policies to large files}.
 
-An interesting fact appreciable in Table \ref{tab:service_variability_file_size}
+An interesting fact appreciable in Tables \ref{tab:service_variability_file_size_download} and \ref{tab:service_variability_file_size_upload}
 is that \textit{managing larger files report better transfer 
 speeds than in case of small files}. Usually, these 
 improvements are slight or moderate ($0.5\%$ to $25\%$ higher MTS); 
@@ -349,68 +432,43 @@ to attain high performance~\cite{allman1999tcp}.
 Further, we found that all the measured Cloud vendors tend to perform a more restrictive
 bandwidth control to outgoing traffic. This can be easily confirmed
 by inspecting the obtained standard deviations $\sigma$ of file MTS 
-listed in Table \ref{tab:service_variability_file_size}. Clearly,
+listed in Table \ref{tab:service_variability_file_size_download}. Clearly,
 \textit{the inbound traffic in Dropbox and Box is much more variable than the outbound traffic}. 
 On the contrary, despite its limited capacity, the source of highest
 transfer variability in SugarSync is in the outbound traffic, which a clear
 proof of the existing heterogeneity in Personal Clouds.
 
 
-\begin{figure}
-\centering	
-	\subfigure[Download transfer times CDF.]{
-  		\label{fig:down_transfer_times_by_size}
-		\includegraphics[width=0.45\textwidth]{figures/download_times_by_file_size.eps}
-	}
- 	\subfigure[Upload transfer times CDF.]{
- 		\label{fig:up_transfer_times_by_size}
- 		\includegraphics[width=0.45\textwidth]{figures/upload_times_by_file_size.eps}
- 	}
-	\caption{Transfer times distributions by file size.}
-	\label{fig:transfer_times_and_speed_by_size}
-	%\vspace{-4mm}
-\end{figure}
-
-
-\begin{table*}
+\begin{table*}[t]
+%\hspace*{-40mm}
 \renewcommand{\arraystretch}{1}\addtolength{\tabcolsep}{-3pt}
 \tiny
 \centering
-\begin{tabular}{|p{0.55cm}|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\begin{tabular}{|p{0.65cm}|c|c|c|c|c|c|c|c|c|}
 \hline
 
-& & \multicolumn{8}{|c|}{Upload File MTS Distribution (KBps)} & \multicolumn{8}{|c|}{Download File MTS Distribution (KBps)} \\
+& & \multicolumn{8}{|c|}{Upload File MTS Distribution (KBps)} \\
 
 \hline
-Size 		& Provider & Min. & Q1 & Median & Q3 & Max. & Mean ($\mu$) & Std. Dev. ($\sigma$) & CV ($\sigma/\mu$) &
-										Min. & Q1 & Median & Q3 & Max. & Mean ($\mu$) & Std. Dev. ($\sigma$) & CV ($\sigma/\mu$) \\ \hline
+Size 		& Provider & Min. & Q1 & Median & Q3 & Max. & Mean ($\mu$) & Std. Dev. ($\sigma$) & CV ($\sigma/\mu$) \\ \hline
 \multirow{3}{*}{$25$MB} 
- & DropBox & $13.54$ & $819.20$ & $903.94$ & $1008.24$ & $1456.36$ & $896.28$ & $151.56$ & $0.1691$ &
- 							$24.89$ & $582.54$ & $624.152$ & $672.16$ & $970.90$ & $626.94$ & $71.23$ & $0.1136$  \\
- & Box & $14.70$ & $1379.71$ & $2383.13$ & $3276.80$ & $3744.91$ & $2271,29$ & $973.06$ & $0.3963$ &
- 					$163.84$ & $397.19$ & $459.90$ & $534.99$ & $794.38$ & $463.72$ & $87.76$ & $0.0837$  \\
- & SugarSync & $41.87$ & $78.25$ & $78.96$ & $80.17$ & $86.23$ & $79.26$ & $2.82$ & $0.0356$  &
- 								$136.53$ & $198.59$ & $200.11$ & $201.65$ & $1048.57$ & $201.35$ & $37.89$ & $0.1882$  \\ \hline
+ & DropBox & $13.54$ & $819.20$ & $903.94$ & $1008.24$ & $1456.36$ & $896.28$ & $151.56$ & $0.1691$  \\
+ & Box & $14.70$ & $1379.71$ & $2383.13$ & $3276.80$ & $3744.91$ & $2271,29$ & $973.06$ & $0.3963$  \\
+ & SugarSync & $41.87$ & $78.25$ & $78.96$ & $80.17$ & $86.23$ & $79.26$ & $2.82$ & $0.0356$  \\ \hline
  								
 \multirow{3}{*}{$50$MB} 
- & DropBox & $213.99$ & $970.90$ & $1092.27$ & $1191.56$ & $1497.97$ & $1069.12$ & $152.23$ & $0.1424$ & 
- 							$210.56$ & $624.15$ & $663.66$ & $699.05$ & $888.62$ & $661.55$ & $58.02$ & $0.0877$   \\
- & Box & $5.26$ & $2496.61$ & $4369.07$ & $4766.25$ & $5825.42$ & $3721.12$ & $1357.18$ & $0.3647$  &
- 					$14.15$ & $623.16$ & $647.26$ & $672.16$ & $887.42$ & $646.22$ & $44.33$ & $0.0686$  \\
- & SugarSync & $40.27$ & $78.72$ & $79.44$ & $80.41$ & $86.95$ & $79.59$ & $3.08$ & $0.0387$ &
- 								$144.43$ & $200.88$ & $202.43$ & $204.00$ & $2496.61$ & $216.57$ & $149.28$ & $0.6893$  \\ \hline
+ & DropBox & $213.99$ & $970.90$ & $1092.27$ & $1191.56$ & $1497.97$ & $1069.12$ & $152.23$ & $0.1424$  \\
+ & Box & $5.26$ & $2496.61$ & $4369.07$ & $4766.25$ & $5825.42$ & $3721.12$ & $1357.18$ & $0.3647$  \\
+ & SugarSync & $40.27$ & $78.72$ & $79.44$ & $80.41$ & $86.95$ & $79.59$ & $3.08$ & $0.0387$  \\ \hline
  								
 \multirow{3}{*}{$100$MB} 
- & DropBox & $250.26$ & $1127.50$ & $1219.27$ & $1310.72$ & $1519.66$ & $1205.69$ & $143.05$ & $0.1186$ &  
- 							$25.09$ & $647.27$ & $676.50$ & $708.49$ & $1497.97$ & $680.32$ & $50.94$ & $0.0749$  \\
- & Box & $4.71$ & $2912.71$ & $3883.61$ & $6168.09$ & $7489.83$ & $4350.37$ & $1797.32$ & $0.3252$ &
- 					$14.43$ & $436.91$ & $487.71$ & $579.32$ & $1233.62$ & $507.82$ & $89.36$ & $0.0539$  \\ 
- & SugarSync & $42.23$ & $78.96$ & $79.62$ & $80.66$ & $87.31$ & $79.64$ & $3.74$ & $0.0470$  &
- 							$145.64$ & $202.03$ & $204.00$ & $205.20$ & $3744.91$ & $223.49$ & $219.50$ & $0.9822$  \\ \hline
+ & DropBox & $250.26$ & $1127.50$ & $1219.27$ & $1310.72$ & $1519.66$ & $1205.69$ & $143.05$ & $0.1186$  \\
+ & Box & $4.71$ & $2912.71$ & $3883.61$ & $6168.09$ & $7489.83$ & $4350.37$ & $1797.32$ & $0.3252$  \\ 
+ & SugarSync & $42.23$ & $78.96$ & $79.62$ & $80.66$ & $87.31$ & $79.64$ & $3.74$ & $0.0470$  \\ \hline
  
 \end{tabular}
-\caption{Summary of file MTS distributions by file size.}
-\label{tab:service_variability_file_size}
+\caption{Summary of upload file MTS distributions by file size.}
+\label{tab:service_variability_file_size_upload}
 \end{table*}
 
 \begin{figure}[t]

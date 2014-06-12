@@ -12,54 +12,53 @@ A level-1 auxiliary file: validation.aux
 A level-1 auxiliary file: conclusions2.aux
 The style file: plain.bst
 Database file #1: citations.bib
-Warning--I didn't find a database entry for "inside_dropbox"
-Warning--I didn't find a database entry for "allman1999tcp"
 Warning--to sort, need author or key in gartner
 Warning--to sort, need author or key in oauth
 Warning--to sort, need author or key in kryo
 Too many commas in name 1 of "Songbin Liu, Xiaomeng Huang, Haohuan Fu, Guangwen Yang" for entry liu2013
 while executing---line 1049 of file plain.bst
+Warning--empty journal in allman1999tcp
 Too many commas in name 1 of "Songbin Liu, Xiaomeng Huang, Haohuan Fu, Guangwen Yang" for entry liu2013
 while executing---line 1090 of file plain.bst
-You've used 34 entries,
+You've used 35 entries,
             2118 wiz_defined-function locations,
-            690 strings with 9327 characters,
-and the built_in function-call counts, 12771 in all, are:
-= -- 1239
-> -- 589
+            693 strings with 9399 characters,
+and the built_in function-call counts, 13069 in all, are:
+= -- 1265
+> -- 612
 < -- 17
-+ -- 240
-- -- 200
-* -- 807
-:= -- 1951
-add.period$ -- 99
-call.type$ -- 34
-change.case$ -- 201
++ -- 249
+- -- 208
+* -- 827
+:= -- 2007
+add.period$ -- 102
+call.type$ -- 35
+change.case$ -- 207
 chr.to.int$ -- 0
-cite$ -- 37
-duplicate$ -- 525
-empty$ -- 1060
-format.name$ -- 200
-if$ -- 2795
+cite$ -- 39
+duplicate$ -- 535
+empty$ -- 1077
+format.name$ -- 208
+if$ -- 2852
 int.to.chr$ -- 0
-int.to.str$ -- 34
-missing$ -- 26
-newline$ -- 170
-num.names$ -- 62
-pop$ -- 282
+int.to.str$ -- 35
+missing$ -- 27
+newline$ -- 175
+num.names$ -- 64
+pop$ -- 290
 preamble$ -- 1
-purify$ -- 168
+purify$ -- 173
 quote$ -- 0
-skip$ -- 429
+skip$ -- 437
 stack$ -- 0
-substring$ -- 755
+substring$ -- 760
 swap$ -- 182
 text.length$ -- 17
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 134
-warning$ -- 3
-while$ -- 122
-width$ -- 36
-write$ -- 356
+type$ -- 138
+warning$ -- 4
+while$ -- 124
+width$ -- 37
+write$ -- 365
 (There were 2 error messages)
