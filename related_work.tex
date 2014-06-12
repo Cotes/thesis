@@ -182,14 +182,14 @@ Sharing is an attractive feature that most of Personal Clouds provide, whether i
 
 \begin{table}
 \begin{center}
-    \begin{tabular}{ | p{3.3cm} | p{1.5cm} | p{1.5cm} | p{1.5cm} | }
+    \begin{tabular}{ | p{3.3cm} | p{1.5cm} | p{2cm} | p{2.5cm} | }
     \hline
     \rowcolor[gray]{0.8}
 
 	\textbf{Personal Cloud} &
-	\begin{sideways}\textbf{Internal sharing}\end{sideways} &
-	\begin{sideways}\textbf{Public file sharing}\end{sideways} &
-	\begin{sideways}\textbf{Collaborative editing}\end{sideways} \\ \hline
+	\textbf{Internal sharing} &
+	\textbf{Public file sharing} &
+	\textbf{Collaborative editing} \\ \hline
 
 	\textbf{Google Drive} &
 	Yes &
@@ -431,7 +431,7 @@ StackSync relies on a high-performance message broker compatible with the Advanc
 
 
 ObjectMQ is a lightweight remote object layer constructed on top of a messaging
-middleware. The current StackSync implementation relies on RabbitMQ~\cite{rabbitmq}, an open source message broker software that implements the AMQP standard. ObjectMQ combines RPC (Remote Procedure Call) and MOM (Message-oriented Middleware) models to devise four MOM-RPC invocation abstractions: two one-to-one calls (synchronous, asynchronous) and two one-to-many calls (multi, event).
+middleware. The current StackSync implementation relies on RabbitMQ, an open source message broker software that implements the AMQP standard. ObjectMQ combines RPC (Remote Procedure Call) and MOM (Message-oriented Middleware) models to devise four MOM-RPC invocation abstractions: two one-to-one calls (synchronous, asynchronous) and two one-to-many calls (multi, event).
 
 
 In general, objects receive method calls as messages in incoming queues, and then reply the results to clients in response queues. One-to-many calls are distributed using the appropriate AMQP Exchanges (broker message dispatchers). Recall that Exchanges determine message delivery and provide different delivery schemes, like direct (deliver this message to a particular queue) and publish-subscribe (deliver this message to all queues subscribed to a certain topic). 

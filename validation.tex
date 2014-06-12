@@ -52,7 +52,7 @@ Tables~\ref{table:services} and~\ref{table:clients} shows the software versions 
 
 \section{Setup and Benchmarking Tool}
 
-To evaluate the system with the auto-scaling feature disabled, we developed a benchmarking tool to generate
+To evaluate the system, we developed a benchmarking tool to generate
 realistic workloads. We implemented this tool because we found no publicly available trace containing both 
 the files and the history of modifications to those files that allowed us to evaluate our file-syncing service.
 
@@ -123,7 +123,7 @@ successfully committed.
 The results are shown in Fig.~\ref{fig:overhead_clients}. As seen in this
 figure, Dropbox exhibits the highest overhead, sending up to $150$ MB of additional
 unnecessary traffic. This results agree very well with other studies such as that
-of~\cite{li13}. On the contrary, StackSync has a low overhead, \textit{comparable to that of commercial
+of~\cite{liu2013}. On the contrary, StackSync has a low overhead, \textit{comparable to that of commercial
 Personal Cloud services such as OneDrive}.
 
 

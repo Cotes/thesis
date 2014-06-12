@@ -4,22 +4,13 @@
 Gartner consumer research: Personal cloud.
 \newblock \url{http://www.gartner.com/technology/research/personal-cloud/#}.
 
-\bibitem{Dropbox}
-How we've scaled dropbox.
-\newblock \url{http://www.youtube.com/watch?v=PE4gwstWhmc}.
-
 \bibitem{kryo}
 Kryo: Fast, efficient java serialization and cloning.
 \newblock \url{http://code.google.com/p/kryo/}.
 
-\bibitem{omq}
-Objectmq mom-rpc middleware.
-\newblock \url{https://github.com/cloudspaces/objectmq}.
-
-\bibitem{Agrawal07}
-N.~Agrawal, W.~J. Bolosky, J.~R. Douceur, and J.~R. Lorch.
-\newblock A five-year study of file-system metadata.
-\newblock {\em Trans. Storage}, 3(3), October 2007.
+\bibitem{oauth}
+Oauth.
+\newblock \url{http://oauth.net/}.
 
 \bibitem{ardissono2009service}
 L.~Ardissono, A.~Goy, G.~Petrone, and M.~Segnan.
@@ -40,6 +31,11 @@ L.~P. Cox, C.~D. Murray, and B.~D. Noble.
 I.~Drago, M.~Mellia, M.~Munafo, A.~Sperotto, R.~Sadre, and A.~Pras.
 \newblock Inside dropbox: Understanding personal cloud storage services.
 \newblock In {\em Proc. of ACM IMC}, pages 481--494, 2012.
+
+\bibitem{drago2013benchmarking}
+Idilio Drago, Enrico Bocchi, Marco Mellia, Herman Slatman, and Aiko Pras.
+\newblock Benchmarking personal cloud storage.
+\newblock In {\em Proc. of IMC}, 2013.
 
 \bibitem{Eshghi05}
 K.~Eshghi and H.~K. Tang.
@@ -64,16 +60,6 @@ A.~Hari, R.~Viswanathan, T.V. Lakshman, and Y.J. Chang.
 \newblock The personal cloud -- design, architecture and matchmaking algorithms
   for resource management.
 \newblock In {\em Proc. of 2nd Usenix Hot-ICE}, pages 3--3, 2012.
-
-\bibitem{harnik10}
-D.~Harnik, B.~Pinkas, and A.~Shulman-Peleg.
-\newblock Side channels in cloud services: Deduplication in cloud storage.
-\newblock {\em IEEE Security \& Privacy}, 8(6):40--47, 2010.
-
-\bibitem{syncany}
-P.~Heckel.
-\newblock Syncany open source file synchronization.
-\newblock \url{http://www.syncany.org/}.
 
 \bibitem{irmak05}
 U.~Irmak, S.~Mihaylov, and T.~Suel.
@@ -104,6 +90,13 @@ OASIS.
 B.~C. Pierce.
 \newblock {Unison File Synchronizer}.
 \newblock http://www.cis.upenn.edu/\~{}bcpierce/unison/.
+
+\bibitem{liu2013}
+Haohuan Fu Guangwen~Yang Songbin~Liu, Xiaomeng~Huang.
+\newblock Understanding data characteristics and access patterns in a cloud
+  storage system.
+\newblock In {\em Proc. of the 13th IEEE/ACM International Symposium on
+  Cluster, Cloud, and Grid Computing}, pages 327--334, 2013.
 
 \bibitem{suel04}
 T.~Suel, P.~Noel, and D.~Trendafilov.
