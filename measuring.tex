@@ -140,3 +140,383 @@ was possible for the same period of time.
  
 We depict in Table \ref{tab:measurement_data} the total 
 number of storage operations performed during the measurement period.
+
+\section{Results}
+
+\begin{figure}[t]
+  \subfigure[Download file MTS distributions.]
+{\label{fig:avg_down_file_transfer_speed}
+\includegraphics[width=0.45\textwidth]{figures/avg_down_file_transfer_speed_new.eps}}
+  \subfigure[Upload file MTS distributions.]
+{\label{fig:avg_up_file_transfer_speed}
+\includegraphics[width=0.45\textwidth]{figures/avg_up_file_transfer_speed_new.eps}}      
+  \subfigure[Download bandwidth distributions.]
+{\label{fig:down_bw_comparison}
+\includegraphics[width=0.45\textwidth]{figures/down_bw_comparison_new.eps}}
+  \subfigure[Upload bandwidth distributions.]
+{\label{fig:up_bw_comparison}
+\includegraphics[width=0.45\textwidth]{figures/up_bw_comparison_new.eps}}
+ 
+   \caption{Transfer capacity of Box, DropBox and SugarSync free account REST API services.
+   The data represented in these figures corresponds to the aggregation
+   of the up/down and service variability workloads during $10$ days (June/July $2012$) in our university laboratories.}
+   \label{fig:transfer_mean_speeds_and_bw_distributions}
+%   \vspace{-4mm}
+\end{figure}
+
+\begin{figure*}
+\centering	
+  \subfloat[DropBox down. file MTS fitting ($150$MB files).]
+{\label{fig:qq_plot_dropbox_dmts}
+\includegraphics[width=0.325\textwidth]{dropbox_dw_150mb_fittings.eps}} 
+ 	\subfloat[DropBox up. file MTS fitting ($150$MB files).]
+{\label{fig:qq_plot_dropbox_umts}
+\includegraphics[width=0.325\textwidth]{dropbox_up_150mb_fittings.eps}}
+ 	\subfloat[Box down. file MTS fitting ($100$MB files).]
+{\label{fig:qq_plot_box_dmts}
+
+\includegraphics[width=0.325\textwidth]{box_dw_100mb_fittings.eps}}
+	\caption{Distribution fittings of upload/download file mean transfer speeds 
+	(MTS) of the examined Personal Clouds (up/down workload, university labs).}
+	\label{fig:qq_plot}
+	\vspace{-4mm}
+\end{figure*}
+
+\subsection{Transfer Capacity of Personal Clouds}
+%Transfer characterization: avg. transfer distributions, bandwidths distributions, times
+%Service variability depending on the day of the week
+In this section, the transfer capacity of Box, DropBox and SugarSync is characterized using the following indicators:
+\begin{itemize}
+	\item \textit{File Mean Transfer Speed (MTS)}. This metric is defined as \textit{the ratio of
+	the size of a file, $S$, to the time, $T$, that was spent to transfer it: $MTS = {S}/{T}$ (KBytes/sec)}. 
+	\item \textit{Bandwidth Distributions}. We define as a \textit{bandwidth trace} the set of
+	values that reflects the transfer speed of a file at regular intervals of $2$ secs. To
+	obtain a single empirical distribution, we aggregated the bandwidth traces of
+	all the transfers separated by uploads and downloads. We refer to the resulting empirical
+	distribution as the \textit{aggregated bandwidth distribution}.
+	 
+\end{itemize}
+
+\noindent\textbf{Transfer speeds}. Fig.~\ref{fig:transfer_mean_speeds_and_bw_distributions} 
+reports these metrics for both workloads (up/down and service
+variability) executed in our university labs during $10$ days.
+First, Fig.~\ref{fig:transfer_mean_speeds_and_bw_distributions} 
+evidences an interesting fact: \textit{Personal Clouds 
+are heterogeneous in terms of transfer speed}.
+For instance, Fig.~\ref{fig:avg_up_file_transfer_speed} 
+shows that Box and DropBox present an upload MTS 
+several times faster than SugarSync. The same observation holds for
+downloads. Moreover, the heterogeneity of these services also depends
+on the \textit{traffic type} (in/out). This can be appreciated by
+comparing Fig.~\ref{fig:avg_down_file_transfer_speed} 
+with Fig.~\ref{fig:avg_up_file_transfer_speed}: \textit{DropBox exhibits
+the best download MTS while Box presents the fastest 
+uploads.}
+
+This proves that \textit{the transfer performance of these services greatly varies among providers}, and
+consequently, developers should be aware of this in order to select an adequate provider. 
+
+Among the examined Personal Clouds, DropBox and SugarSync 
+are \textit{resellers} of major Cloud storage providers (Amazon S3 
+and Carpathia Hosting, respectively). On the other hand, Box claims to be owner of several
+datacenters. In our view, it is interesting to analyze this 
+Cloud ecosystem and the possible implications to the service delivered to end-users.
+
+
+
+In this sense, in Fig. \ref{fig:transfer_mean_speeds_and_bw_distributions} we observe  
+that Personal Clouds apply \textit{distinct internal control policies}
+to the inbound/outbound bandwidth provided to users. To wit,
+both DropBox and Box exhibit an \textit{upload transfer capacity remarkably better
+than the download capacity}. This means that the datacenter outgoing
+traffic is more \textit{controlled and restricted} than the incoming traffic. This agrees
+well with the current pricing policies of major Cloud providers (Amazon S3,
+Google Storage) which do not charge inbound traffic whereas
+the outbound traffic is subject to specific rates (see \url{http://aws.amazon.com/en/s3/pricing/}). 
+
+In SugarSync, both the upload and download transfer speeds are constant and
+low. Interestingly, SugarSync presents slightly faster downloads than uploads,
+though only a small fraction of downloads (less than $1\%$) exhibits a much
+higher transfer speed than the rest. These observations are also supported by Fig.~\ref{fig:down_bw_comparison} and Fig.~\ref{fig:up_bw_comparison}: the captured download
+bandwidth values fall into a small range $[200, 1300]$ KB/sec. Also,
+the shape of these distributions are not steep, which reflects that there is
+a strong control in the download bandwidth.
+On the contrary, upload bandwidth distributions present more irregular shapes and
+they cover a wider range of values, specially for Box.
+As a possible explanation to this behavior, the experiments of Fig. \ref{fig:transfer_mean_speeds_and_bw_distributions} 
+were executed from our university labs (Spain) to exclude the impact of geographic heterogeneity. 
+Considering the fact that the majority of 
+Personal Cloud datacenters are located in USA~\cite{inside_dropbox}, 
+this may have implications in the cost of the traffic sent to Europe. This could motivate
+the enforcement of more restrictive bandwidth control policies to
+the outbound traffic.
+\medskip
+
+\noindent\textbf{Transfers \& geographic location}. 
+Next, we analyze transfer speeds depending
+on the geographic location of vantage points. 
+
+In Fig.~\ref{fig:transfer_times_geographic_location},
+we illustrate the file MTS obtained from executing the up/down 
+workload during $3$ weeks in PlanetLab. 
+As can be seen in the figure, \textit{Personal Clouds provide a
+much greater QoS in North American countries than in European countries}.
+Intuitively, the location of the datacenter plays
+a critical role in the performance of the service delivered to users. 
+Observe that this phenomenon is orthogonal to all the examined vendors.
+
+Finally, we quantify the relative download/upload transfer performance delivered by 
+each service as a function of the geographic location of users.
+To this end,
+we used a simple metric, what we call the \textit{download/upload ratio} ($D/U$), which
+is the result of dividing the download and upload transfer speeds of a certain vendor.   
+In Table \ref{tab:down_up_ratio_location}, we calculated this ratio over the mean ($\bar{U},\bar{D}$) 
+and median ($\tilde{U},\tilde{D}$) values of the file MTS distributions of each
+provider depending on the geographic location of nodes. 
+
+In line with results obtained in our university labs, 
+\textit{European nodes receive a much higher 
+transfer speed when uploading than when downloading} ($D/U<1$). 
+However, contrary to conventional wisdom, \textit{North American nodes exhibit 
+just the opposite behavior}. This is clearly visible in DropBox and Box. However, this ratio is constant
+in SugarSync, irrespective of the geographic location.
+
+
+
+
+\begin{figure}
+\centering	
+  %\subfloat[Download MTS distribution.]
+{\label{fig:transfer_times_geographic_location_downloads}
+\includegraphics[width=0.31\textwidth]{geographic_location_downloads.eps}} \\
+ 	%\subfloat[Upload MTS distribution.]
+{\label{fig:transfer_times_geographic_location_uploads}
+\includegraphics[width=0.31\textwidth]{geographic_location_uploads.eps}}
+%\subfloat[-.]
+%{\label{fig:mean_upload_speed_distributions_by_file_size}
+%\includegraphics[width=0.24\textwidth]{mean_upload_speed_distributions_by_file_size.eps}}
+%  \subfloat[-.]
+%{\label{fig:mean_download_speed_distributions_by_file_size}
+%\includegraphics[width=0.24\textwidth]{mean_download_speed_distributions_by_file_size.eps}} 
+	\caption{File MTS distributions of PlanetLab nodes from June $22$ to July $15$ 
+	$2012$ depending on their geographic location (up/down workload).
+	Clearly, USA and Canada nodes exhibit faster transfers than European nodes.}
+	\label{fig:transfer_times_geographic_location}
+	\vspace{-1mm}
+\end{figure}
+
+
+\begin{table}%
+\begin{center}
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+ Geo. Location& \textit{Metric} & Box & DropBox & SugarSync \\ \hline
+\multirow{2}{*}{USA \& CA}
+ & $\bar{D}_{MTS}/\bar{U}_{MTS}$ & $3.198$ & $2.482$ & $2.522$ \\
+ & $\tilde{D}_{MTS}/\tilde{U}_{MTS}$ & $2.550$ & $2.722$ & $2.500$ \\ \hline
+\multirow{2}{*}{WEST EU}
+ & $\bar{D}_{MTS}/\bar{U}_{MTS}$ & $0.255$ & $0.681$ & $2.589$ \\
+ & $\tilde{D}_{MTS}/\tilde{U}_{MTS}$ & $0.190$ & $0.682$ & $2.387$ \\ \hline
+\end{tabular}
+\caption{Download/Upload transfer speed ratio of Personal Clouds depending on the client's geographic location.}
+\vspace{-11mm}
+\label{tab:down_up_ratio_location}
+\end{center}
+\end{table}
+
+
+\subsection{Variability of Transfer Performance}
+\label{sec:variability}
+
+In this section, we analyze which factors can contribute to the
+variance in transfer speed observed in Personal Clouds.~We
+study three potential factors, which are \textit{the size of file transfers};
+\textit{the load of accounts}; and \textit{time-of-day effects}.
+\medskip
+
+%<<<<<<< .mine
+%\textbf{Transfers \& file size}. Regarding the first question, we analyze the role of the
+%file size in the API service based on \textit{transfer times} 
+%=======
+\noindent\textbf{Variability over file size}. We first investigate the role that 
+file size plays on \textit{transfer times} 
+%>>>>>>> .r818
+and \textit{transfer speeds}. Fig. \ref{fig:transfer_times_and_speed_by_size}
+and Table \ref{tab:service_variability_file_size} report the results
+for both metrics as function of file size, respectively. Unless otherwise
+stated, results reported in this subsection are based on executing the 
+up/down workload in our university labs during $5$ days.  
+
+Fig. \ref{fig:transfer_times_and_speed_by_size} plots the
+transfer time distribution for all the evaluated
+Personal Clouds. As shown in the figure, for
+the same provider, all the distributions present a similar
+shape, which suggests that \textit{the size of file transfers is not a 
+source of variability}. As expected, the only difference is that
+the distributions for large file sizes are shifted to the right towards
+longer time values. Significant or abnormal differences were not observed
+when transferring large files compared to small data files. This observation is applicable to all evaluated Personal Clouds. 
+This leads us to the conclusion that these Personal Clouds
+\textit{do not perform aggressive bandwidth throttling policies to large files}.
+
+An interesting fact appreciable in Table \ref{tab:service_variability_file_size}
+is that \textit{managing larger files report better transfer 
+speeds than in case of small files}. Usually, these 
+improvements are slight or moderate ($0.5\%$ to $25\%$ higher MTS); 
+however, uploading $100$MB files to Box exhibits a MTS $48\%$ higher
+than uploading $25$MB files to this service. In our view, this phenomena is due
+to the variability in the incoming bandwidth supplied by Box, and 
+the TCP slow start mechanism, which makes difficult for small file transfers 
+to attain high performance~\cite{allman1999tcp}. 
+
+Further, we found that all the measured Cloud vendors tend to perform a more restrictive
+bandwidth control to outgoing traffic. This can be easily confirmed
+by inspecting the obtained standard deviations $\sigma$ of file MTS 
+listed in Table \ref{tab:service_variability_file_size}. Clearly,
+\textit{the inbound traffic in Dropbox and Box is much more variable than the outbound traffic}. 
+On the contrary, despite its limited capacity, the source of highest
+transfer variability in SugarSync is in the outbound traffic, which a clear
+proof of the existing heterogeneity in Personal Clouds.
+
+
+\begin{figure}
+\centering	
+  %\subfloat[Download transfer times CDF.]
+{\label{fig:down_transfer_times_by_size}
+\includegraphics[width=0.31\textwidth]{download_times_by_file_size.eps}} \\
+
+ 	%\subfloat[Upload transfer times CDF.]
+{\label{fig:up_transfer_times_by_size}
+\includegraphics[width=0.31\textwidth]{upload_times_by_file_size.eps}}
+%\subfloat[-.]
+%{\label{fig:mean_upload_speed_distributions_by_file_size}
+%\includegraphics[width=0.24\textwidth]{mean_upload_speed_distributions_by_file_size.eps}}
+%  \subfloat[-.]
+%{\label{fig:mean_download_speed_distributions_by_file_size}
+%\includegraphics[width=0.24\textwidth]{mean_download_speed_distributions_by_file_size.eps}} 
+	\caption{Transfer times distributions by file size.}
+	\label{fig:transfer_times_and_speed_by_size}
+	\vspace{-4mm}
+\end{figure}
+
+
+\begin{table*}
+\renewcommand{\arraystretch}{1}\addtolength{\tabcolsep}{-3pt}
+\tiny
+\centering
+\begin{tabular}{|p{0.55cm}|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+
+& & \multicolumn{8}{|c|}{Upload File MTS Distribution (KBps)} & \multicolumn{8}{|c|}{Download File MTS Distribution (KBps)} \\
+
+\hline
+Size 		& Provider & Min. & Q1 & Median & Q3 & Max. & Mean ($\mu$) & Std. Dev. ($\sigma$) & CV ($\sigma/\mu$) &
+										Min. & Q1 & Median & Q3 & Max. & Mean ($\mu$) & Std. Dev. ($\sigma$) & CV ($\sigma/\mu$) \\ \hline
+\multirow{3}{*}{$25$MB} 
+ & DropBox & $13.54$ & $819.20$ & $903.94$ & $1008.24$ & $1456.36$ & $896.28$ & $151.56$ & $0.1691$ &
+ 							$24.89$ & $582.54$ & $624.152$ & $672.16$ & $970.90$ & $626.94$ & $71.23$ & $0.1136$  \\
+ & Box & $14.70$ & $1379.71$ & $2383.13$ & $3276.80$ & $3744.91$ & $2271,29$ & $973.06$ & $0.3963$ &
+ 					$163.84$ & $397.19$ & $459.90$ & $534.99$ & $794.38$ & $463.72$ & $87.76$ & $0.0837$  \\
+ & SugarSync & $41.87$ & $78.25$ & $78.96$ & $80.17$ & $86.23$ & $79.26$ & $2.82$ & $0.0356$  &
+ 								$136.53$ & $198.59$ & $200.11$ & $201.65$ & $1048.57$ & $201.35$ & $37.89$ & $0.1882$  \\ \hline
+ 								
+\multirow{3}{*}{$50$MB} 
+ & DropBox & $213.99$ & $970.90$ & $1092.27$ & $1191.56$ & $1497.97$ & $1069.12$ & $152.23$ & $0.1424$ & 
+ 							$210.56$ & $624.15$ & $663.66$ & $699.05$ & $888.62$ & $661.55$ & $58.02$ & $0.0877$   \\
+ & Box & $5.26$ & $2496.61$ & $4369.07$ & $4766.25$ & $5825.42$ & $3721.12$ & $1357.18$ & $0.3647$  &
+ 					$14.15$ & $623.16$ & $647.26$ & $672.16$ & $887.42$ & $646.22$ & $44.33$ & $0.0686$  \\
+ & SugarSync & $40.27$ & $78.72$ & $79.44$ & $80.41$ & $86.95$ & $79.59$ & $3.08$ & $0.0387$ &
+ 								$144.43$ & $200.88$ & $202.43$ & $204.00$ & $2496.61$ & $216.57$ & $149.28$ & $0.6893$  \\ \hline
+ 								
+\multirow{3}{*}{$100$MB} 
+ & DropBox & $250.26$ & $1127.50$ & $1219.27$ & $1310.72$ & $1519.66$ & $1205.69$ & $143.05$ & $0.1186$ &  
+ 							$25.09$ & $647.27$ & $676.50$ & $708.49$ & $1497.97$ & $680.32$ & $50.94$ & $0.0749$  \\
+ & Box & $4.71$ & $2912.71$ & $3883.61$ & $6168.09$ & $7489.83$ & $4350.37$ & $1797.32$ & $0.3252$ &
+ 					$14.43$ & $436.91$ & $487.71$ & $579.32$ & $1233.62$ & $507.82$ & $89.36$ & $0.0539$  \\ 
+ & SugarSync & $42.23$ & $78.96$ & $79.62$ & $80.66$ & $87.31$ & $79.64$ & $3.74$ & $0.0470$  &
+ 							$145.64$ & $202.03$ & $204.00$ & $205.20$ & $3744.91$ & $223.49$ & $219.50$ & $0.9822$  \\ \hline
+ 
+\end{tabular}
+\caption{Summary of file MTS distributions by file size.}
+\vspace{-8.5mm}
+\label{tab:service_variability_file_size}
+\end{table*}
+
+\begin{figure*}
+
+  \subfloat[SugarSync does not present important changes
+  in both in/out traffic speed over time.]
+{\label{fig:transfer_time_series_variability_sugarsync}
+\includegraphics[width=0.315\textwidth]{sugarsync_time_series.eps}}
+  \subfloat[We observe daily patterns in the DropBox upload transfer speed.
+  Download transfer speed remains stable.]
+{\label{fig:transfer_time_series_variability_dropbox}
+\includegraphics[width=0.34\textwidth]{dropbox_time_series.eps}}  
+  \subfloat[Box upload transfers are highly variable and probably affected by
+  daily patterns.]
+{\label{fig:transfer_time_series_variability_box}
+
+\includegraphics[width=0.32\textwidth]{box_time_series.eps}}         
+   \caption{Evolution of Personal Clouds upload/download transfer speed during $5$ days. We plotted
+   in a time-series fashion the mean aggregated bandwidth of all nodes ($600$ secs. time-slots) executing 
+   the service variability workload in our university laboratories ($3$rd$-8$th July $2012$).}
+   \label{fig:transfer_time_series_variability}
+	\vspace{-3mm}
+\end{figure*}
+
+
+\medskip
+
+\noindent\textbf{Variability over time}. We now analyze how the
+transfer speed varies over time. To better capture these variations, 
+we used the data from the \textit{service variability workload}, 
+which was aimed to maintain a constant transfer flow and was executed at our university labs.
+The results are shown in Fig. \ref{fig:transfer_time_series_variability} 
+where the \textit{mean aggregated bandwidth} of all nodes as a whole is plotted in time 
+intervals~of $600$ seconds. As expected, we found that the transfer speed of these services behave
+differently depending on the provider.~To wit, while SugarSync
+exhibits a \textit{stable service for both uploads and downloads}, at
+the price of a modest transfer capacity (Fig. \ref{fig:transfer_time_series_variability_sugarsync}), the upload transfer
+speed varies significantly over time for Dropbox and Box.
+
+\begin{figure}	  
+\includegraphics[width=0.22\textwidth]{transfer_speed_vs_storage_load_dropbox.eps}
+\includegraphics[width=0.22\textwidth]{transfer_speed_vs_storage_load_box.eps}
+	\vspace{-2mm}
+	\caption{Relationship between file MTS and the storage load of an account.}
+	
+	\label{fig:transfer_speed_vs_storage_load}
+	\vspace{-5mm}
+\end{figure}
+
+%As depicted in Fig. 
+Appreciably, \textit{DropBox exhibits appreciable 
+daily upload speed patterns} (Fig. \ref{fig:transfer_time_series_variability_dropbox}). 
+Data represented in Fig. \ref{fig:transfer_time_series_variability} was gathered between
+July $3$, $6$:$00$p.m. and July $8$, $3$:$00$p.m. Clearly, during 
+night hours ($1$ a.m.$-10$ a.m.), transfer speed was between $15\%$ to
+$35\%$ higher than during diurnal hours. This phenomenon has been also
+detected in the experiments performed in PlanetLab, thereby discarding
+any artificial usage pattern induced by our university network. Moreover, considering
+that DropBox uses Amazon S3 as storage backend, our results are consistent with
+other recent works~\cite{variability_ccgrid11} that observed 
+similar patterns in other Amazon services.
+
+Further, we found that Box upload service may be subjected to
+high variability over time. Indeed, we observed \textit{differences in
+upload transfer speed by a factor of $5$  along the same day}. This observation is consistent 
+with the analysis of the file MTS distribution where significant
+heterogeneity was present. More interestingly, Box uploads 
+appear to be also affected by \textit{daily patterns}. Concretely, 
+the periods of highest upload speed occurred during
+the nights, whereas the lowest upload speeds were observed during the
+afternoons ($3$ p.m. $-10$ p.m.). Due to the huge variability
+of this service, a long-term measurement is needed to provide
+a solid proof of this phenomenon, though.
+
+
+With respect to downloads, we observed no important
+speed changes over time in any system. This suggests that
+\textit{downloads are more reliable and predictable, probably
+due to a more intense control of this type of traffic by
+the datacenter}.
