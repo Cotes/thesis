@@ -12,15 +12,27 @@ Kryo: Fast, efficient java serialization and cloning.
 Oauth.
 \newblock \url{http://oauth.net/}.
 
+\bibitem{imc_rapidshare}
+Demetris Antoniades, Evangelos~P. Markatos, and Constantine Dovrolis.
+\newblock One-click hosting services: a file-sharing hideout.
+\newblock In {\em IMC'09}, pages 223--234, 2009.
+
 \bibitem{ardissono2009service}
 L.~Ardissono, A.~Goy, G.~Petrone, and M.~Segnan.
 \newblock From service clouds to user-centric personal clouds.
 \newblock In {\em Proc. of IEEE CLOUD}, pages 1--8, 2009.
 
-\bibitem{Balasubramaniam98}
-S.~Balasubramaniam and B.~C. Pierce.
-\newblock What is a file synchronizer?
-\newblock In {\em Proc. of ACM/IEEE MobiCom}, pages 98--108, 1998.
+\bibitem{bergen2011client}
+A.~Bergen, Y.~Coady, and R.~McGeer.
+\newblock Client bandwidth: The forgotten metric of online storage providers.
+\newblock In {\em IEEE Pacific Rim Conference on Communications, Computers and
+  Signal Processing}, pages 543--548, 2011.
+
+\bibitem{planetlab}
+Brent Chun, David Culler, Timothy Roscoe, Andy Bavier, Larry Peterson, Mike
+  Wawrzoniak, and Mic Bowman.
+\newblock Planetlab: an overlay testbed for broad-coverage services.
+\newblock {\em SIGCOMM Comput. Commun. Rev.}, 33(3):3--12, 2003.
 
 \bibitem{Cox02}
 L.~P. Cox, C.~D. Murray, and B.~D. Noble.
@@ -61,15 +73,41 @@ A.~Hari, R.~Viswanathan, T.V. Lakshman, and Y.J. Chang.
   for resource management.
 \newblock In {\em Proc. of 2nd Usenix Hot-ICE}, pages 3--3, 2012.
 
+\bibitem{early_experiences_azure}
+Zach Hill, Jie Li, Ming Mao, Arkaitz Ruiz-Alvarez, and Marty Humphrey.
+\newblock Early observations on the performance of windows azure.
+\newblock In {\em HPDC '10}, pages 367--376, 2010.
+
+\bibitem{hu2010good}
+W.~Hu, T.~Yang, and J.N. Matthews.
+\newblock The good, the bad and the ugly of consumer cloud storage.
+\newblock {\em ACM SIGOPS Operating Systems Review}, 44(3):110--115, 2010.
+
+\bibitem{variability_ccgrid11}
+A.~Iosup, N.~Yigitbasi, and D.~Epema.
+\newblock On the performance variability of production cloud services.
+\newblock In {\em CCGRID'11}, pages 104--113, 2011.
+
 \bibitem{irmak05}
 U.~Irmak, S.~Mihaylov, and T.~Suel.
 \newblock Improved single-round protocols for remote file synchronization.
 \newblock In {\em Proc. of IEEE INFOCOM}, pages 1665--1676, 2005.
 
+\bibitem{nature_data_center_traffic}
+Srikanth Kandula, Sudipta Sengupta, Albert Greenberg, Parveen Patel, and Ronnie
+  Chaiken.
+\newblock The nature of data center traffic: measurements \& analysis.
+\newblock In {\em SIGCOMM IMC'09}, pages 202--208, 2009.
+
 \bibitem{langford01}
 J.~Langford.
 \newblock Multiround rsync.
 \newblock \url{www.cs.cmu.edu/~jcl/research/mrsync/-mrsync.ps}, 2001.
+
+\bibitem{cloudcmp}
+A.~Li, X.~Yang, S.~Kandula, and M.~Zhang.
+\newblock Cloudcmp: comparing public cloud providers.
+\newblock In {\em ACM IMC'10}, pages 1--14, 2010.
 
 \bibitem{menasce2005mom}
 D.~A Menasce.
@@ -86,10 +124,20 @@ OASIS.
 \newblock Amqp: Advanced message queueing protocol.
 \newblock \url{http://www.amqp.org/}.
 
+\bibitem{s3_grids}
+Mayur~R. Palankar, Adriana Iamnitchi, Matei Ripeanu, and Simson Garfinkel.
+\newblock Amazon s3 for science grids: a viable solution?
+\newblock In {\em DADC'08}, pages 55--64, 2008.
+
 \bibitem{unison}
 B.~C. Pierce.
 \newblock {Unison File Synchronizer}.
 \newblock http://www.cis.upenn.edu/\~{}bcpierce/unison/.
+
+\bibitem{one_click_hosting}
+Josep Sanju\E0s-Cuxart, Pere Barlet-Ros, and Josep Sol\E9-Pareta.
+\newblock Measurement based analysis of one-click file hosting services.
+\newblock {\em Journal of Network and Systems Management}, 20:276--301, 2012.
 
 \bibitem{liu2013}
 Haohuan Fu Guangwen~Yang Songbin~Liu, Xiaomeng~Huang.
@@ -119,6 +167,11 @@ A.~Tridgell and P.~Mackerras.
 \newblock The rsync algorithm.
 \newblock Technical Report TR-CS-96-05, Australian National University, Dept.
   of Computer Science, June 1996.
+
+\bibitem{ec2benchmarking}
+E.~Walker.
+\newblock Benchmarking amazon ec2 for high-performance scientific computing.
+\newblock {\em Usenix Login}, 33(5):18--23, 2008.
 
 \bibitem{windley}
 P.~Windley.

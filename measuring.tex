@@ -1,0 +1,142 @@
+\chapter{Measuring Personal Clouds Methodology}
+
+From May $10$, $2012$, to July $15$, $2012$, we installed several
+vantage points in our university network (\textit{Universitat
+Rovira i Virgili}, Spain) and PlanetLab~\cite{planetlab}  
+to measure the performance of three of the major Personal Cloud services in the market: DropBox\footnote{\url{http://www.dropbox.com}}, Box\footnote{\url{http://www.box.net}} 
+and SugarSync\footnote{\url{http://www.sugarsync.com}}. The measurement methodology was based on the REST interfaces that these three Personal Cloud storage services provide to developers.
+
+Personal Clouds provide REST APIs, along with
+their client implementations, to make it possible for developers to
+create novel applications. These APIs incorporate authorization
+mechanisms (OAuth~\cite{oauth}) to manage the credentials and tokens
+that grant access to the files stored in user accounts. A
+developer first registers an application 
+in the Cloud provider website and obtains several tokens.
+As a result of this process, and once the user has authorized
+that application to access his storage space, the Personal Cloud storage service
+gives to the developer an \textit{access token}. Including this \textit{access token} in each API call, the application can operate on the user data.
+
+There are two types of API calls: \textit{meta-info} and
+\textit{data management} calls. The former type refers to
+those calls that retrieve information about the state of the
+account (i.e., storage load, filenames), whereas the latter
+are those calls targeted at managing the stored files
+in the account. %In this work, 
+We will analyze the performance
+of the most important data management calls: \texttt{PUT} and \texttt{GET},
+which serve to store and retrieve files.  
+
+
+\section{Measurement Platform} 
+
+We employed two different platforms
+to execute our tests: University laboratories and PlanetLab.
+The reason behind this is that our labs contain
+\textit{homogeneous and dedicated machines} that are under our control,
+while PlanetLab allows the analysis of each service from \textit{different geographic locations}. 
+
+\textit{University laboratories}. We gathered $30$ machines
+belonging to the same laboratory to perform the measurement.
+These machines were Intel Core$2$ Duo equipped with $4$GB DDR$2$ RAM. 
+The employed operating system was a Debian Linux distribution. 
+Machines were internally connected to the same switch via a $100$Mbps Ethernet links.
+
+\textit{PlanetLab}: We collected $40$ PlanetLab nodes divided into
+two geographic regions: Western Europe and North America. 
+This platform is constituted by heterogeneous (bandwidth, CPU) machines from several
+universities and research institutes. Moreover, there were two points to consider
+when analyzing data coming from PlanetLab nodes: i) Machines might be concurrently
+used by other processes and users, and ii) The quota system of these machines
+limited the amount of in/out data transferred daily. 
+
+Specifically, we used the PlanetLab infrastructure for
+a high-level assessment of Personal Clouds depending on the 
+client's geographic location. 
+However, the mechanisms to enforce bandwidth quotas
+in PlanetLab nodes may induce the appearance of artifacts 
+in bandwidth traces. This made PlanetLab not 
+suitable for a fine-grained analysis in our context.
+   
+\begin{table}%
+\begin{center}
+
+\begin{tabular}{|l|l|l|l|}
+\hline
+Location & Op. Type & Operations & Transferred Data \\ \hline
+\multirow{2}{*}{University Labs}
+ & \texttt{GET} & $168,396$ & $13.509$ TB\\
+ & \texttt{PUT} & $247,210$ & $15.945$ TB\\ \hline
+\multirow{2}{*}{PlanetLab}
+ & \texttt{GET} & $354,909$ & $31.751$ TB\\
+ & \texttt{PUT} & $129,716$ & $9.803$ TB\\ \hline
+\end{tabular}
+\caption{Summary of Measurement Data (May $10$ $-$ July $15$)}
+\vspace{-9mm}
+\label{tab:measurement_data}
+\end{center}
+\end{table}
+
+\section{Workload Model} 
+
+Usually, Personal Cloud services impose file size 
+limitations to their REST interfaces, for
+we used only files of four sizes to facilitate comparison: $25$MB, $50$MB, 
+$100$MB and $150$MB\footnote{Although the official limitation in some cases is fixed
+to $300$MB per file, we empirically proved that uploading files
+larger than $200$MB is highly difficult. In case of Box this limitation
+is $100$MB.}. This approach provides an appropriate substrate 
+to compare all providers with a large amount of samples of equal-size files.
+Thanks to this, we could observe performance variations of a single provider
+managing files of the same size.
+
+In next sections we present the executed worloads.
+
+\subsection{Up/Down Workload}
+The objective of this workload
+was twofold: Measuring the maximum up/down transfer speed of operations
+and detecting correlations between the transfer speed and the load
+of an account. Intuitively, the first objective was achieved by alternating upload
+and download operations, since the provider only needed to handle one 
+operation per account at a time. We achieved the second point
+by acquiring information about the load of an account in each API call.
+
+The execution of this workload was continuously performed
+at each node as follows: First, a node created synthetic 
+files of a size chosen at random from the aforementioned set of sizes.
+That node uploaded files until the capacity of the account was full.
+At this point, that node downloaded all the files also in random order.
+After each download, the file was deleted. 
+
+\subsection{Service Variability Workload}
+This workload maintained 
+in every node a nearly continuous upload and download transfer flow to analyze the performance 
+variability of the service over time. This workload provides an
+appropriate substrate to elaborate a time-series analysis of these services.
+
+The procedure was as follows: The upload process first
+created files corresponding to each defined file size which
+were labeled as ``reserved'', since they were not deleted from the account.
+By doing this we assured that the download process was never interrupted,
+since at least the reserved files were always ready for being downloaded.
+Then, the upload process started uploading synthetic 
+random files until the account was full. When the account was full,
+this process deleted all files with the exception of the reserved ones
+to continue uploading files.
+In parallel, the download process was continuously downloading random files
+stored in the account. 
+ 
+Finally, we executed the experiments
+in different ways depending on the chosen platform. In the case of
+PlanetLab, we employed the \textit{same machines in each test}, and therefore, 
+we needed to sequentially execute all the combinations of workloads and providers. 
+This minimized the impact of hardware and network
+heterogeneity, since all the experiments were executed in the same conditions.
+On the contrary, in our labs we executed in parallel a certain workload
+for all providers (i.e. assigning $10$ machines per provider).
+This provided two main advantages: The measurement process was
+substantially faster, and fair comparison of the three services
+was possible for the same period of time. 
+ 
+We depict in Table \ref{tab:measurement_data} the total 
+number of storage operations performed during the measurement period.

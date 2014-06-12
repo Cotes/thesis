@@ -6,13 +6,12 @@ A level-1 auxiliary file: abstract.aux
 A level-1 auxiliary file: Acknowledgments.aux
 A level-1 auxiliary file: introduction.aux
 A level-1 auxiliary file: related_work.aux
-A level-1 auxiliary file: understanding.aux
+A level-1 auxiliary file: real_related_work.aux
+A level-1 auxiliary file: measuring.aux
 A level-1 auxiliary file: validation.aux
 A level-1 auxiliary file: conclusions2.aux
 The style file: plain.bst
 Database file #1: citations.bib
-Warning--I didn't find a database entry for "rabbitmq"
-Warning--I didn't find a database entry for "li13"
 Warning--to sort, need author or key in gartner
 Warning--to sort, need author or key in oauth
 Warning--to sort, need author or key in kryo
@@ -20,45 +19,45 @@ Too many commas in name 1 of "Songbin Liu, Xiaomeng Huang, Haohuan Fu, Guangwen 
 while executing---line 1049 of file plain.bst
 Too many commas in name 1 of "Songbin Liu, Xiaomeng Huang, Haohuan Fu, Guangwen Yang" for entry liu2013
 while executing---line 1090 of file plain.bst
-You've used 24 entries,
+You've used 34 entries,
             2118 wiz_defined-function locations,
-            636 strings with 7602 characters,
-and the built_in function-call counts, 8271 in all, are:
-= -- 795
-> -- 365
-< -- 11
-+ -- 150
-- -- 122
-* -- 485
-:= -- 1262
-add.period$ -- 69
-call.type$ -- 24
-change.case$ -- 132
+            688 strings with 9300 characters,
+and the built_in function-call counts, 12771 in all, are:
+= -- 1239
+> -- 589
+< -- 17
++ -- 240
+- -- 200
+* -- 807
+:= -- 1951
+add.period$ -- 99
+call.type$ -- 34
+change.case$ -- 201
 chr.to.int$ -- 0
-cite$ -- 27
-duplicate$ -- 347
-empty$ -- 718
-format.name$ -- 122
-if$ -- 1825
+cite$ -- 37
+duplicate$ -- 525
+empty$ -- 1060
+format.name$ -- 200
+if$ -- 2795
 int.to.chr$ -- 0
-int.to.str$ -- 24
-missing$ -- 16
-newline$ -- 120
-num.names$ -- 42
-pop$ -- 203
+int.to.str$ -- 34
+missing$ -- 26
+newline$ -- 170
+num.names$ -- 62
+pop$ -- 282
 preamble$ -- 1
-purify$ -- 109
+purify$ -- 168
 quote$ -- 0
-skip$ -- 288
+skip$ -- 429
 stack$ -- 0
-substring$ -- 442
-swap$ -- 116
-text.length$ -- 11
+substring$ -- 755
+swap$ -- 182
+text.length$ -- 17
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 94
+type$ -- 134
 warning$ -- 3
-while$ -- 76
-width$ -- 26
-write$ -- 246
+while$ -- 122
+width$ -- 36
+write$ -- 356
 (There were 2 error messages)
