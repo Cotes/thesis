@@ -358,22 +358,17 @@ proof of the existing heterogeneity in Personal Clouds.
 
 \begin{figure}
 \centering	
-  %\subfloat[Download transfer times CDF.]
-{\label{fig:down_transfer_times_by_size}
-\includegraphics[width=0.31\textwidth]{download_times_by_file_size.eps}} \\
-
- 	%\subfloat[Upload transfer times CDF.]
-{\label{fig:up_transfer_times_by_size}
-\includegraphics[width=0.31\textwidth]{upload_times_by_file_size.eps}}
-%\subfloat[-.]
-%{\label{fig:mean_upload_speed_distributions_by_file_size}
-%\includegraphics[width=0.24\textwidth]{mean_upload_speed_distributions_by_file_size.eps}}
-%  \subfloat[-.]
-%{\label{fig:mean_download_speed_distributions_by_file_size}
-%\includegraphics[width=0.24\textwidth]{mean_download_speed_distributions_by_file_size.eps}} 
+	\subfigure[Download transfer times CDF.]{
+  		\label{fig:down_transfer_times_by_size}
+		\includegraphics[width=0.45\textwidth]{figures/download_times_by_file_size.eps}
+	}
+ 	\subfigure[Upload transfer times CDF.]{
+ 		\label{fig:up_transfer_times_by_size}
+ 		\includegraphics[width=0.45\textwidth]{figures/upload_times_by_file_size.eps}
+ 	}
 	\caption{Transfer times distributions by file size.}
 	\label{fig:transfer_times_and_speed_by_size}
-	\vspace{-4mm}
+	%\vspace{-4mm}
 \end{figure}
 
 
@@ -415,7 +410,6 @@ Size 		& Provider & Min. & Q1 & Median & Q3 & Max. & Mean ($\mu$) & Std. Dev. ($
  
 \end{tabular}
 \caption{Summary of file MTS distributions by file size.}
-\vspace{-8.5mm}
 \label{tab:service_variability_file_size}
 \end{table*}
 
