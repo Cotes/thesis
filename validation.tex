@@ -185,59 +185,7 @@ rest of the Personal Clouds.
     \end{tabular}
     \caption{Effect of File Bundling.}
     \label{table:bundle}
-\end{table}
-
-\section{Synchronization Time}
-
-Another interesting question to be examined is what is the delay experienced by users to have their devices in sync. 
-To answer this question, we measured the time to synchronize six clients, measuring synchronization time for each type
-of Workspace modification, that is, the creation of a new file (ADD), and the modification (UPDATE) and removal
-of an existing file (REMOVE). The synchronization time was measured as the time elapsed after the modification
-was detected by the \texttt{Watcher} of the client that performed it until the local working copies of the other
-five clients were in sync. In the case of file creation and modification, this time included the delay incurred
-to upload and download the unique chunks from the \texttt{Storage back-end}, hosted in a local cluster running OpenStack Swift. 
-
-\begin{figure*}[t]
-  \centering
-  \subfigure[Boxplots of synchronization time]{
-    \label{fig:time:a}
-    \includegraphics[width=0.45\textwidth]{figures/fig10_2}
-  }
-  \subfigure[synchronization time against file size]{
-    \label{fig:time:b}
-    \includegraphics[width=0.45\textwidth]{figures/fig11}
-  }
-  \caption{Time to synchronize six clients.}
-  \vspace{-5pt}
-  \label{fig:time}
-\end{figure*}
-
-The results are depicted in Fig.~\ref{fig:time:a}. As can be seen in the figure, all the operations take
-only a few seconds to have all the clients in sync, even in the case of the ADD operation where an appreciable
-amount of time is taken up to access the \texttt{Storage back-end}. Because the REMOVE operation does not trigger any data flow to and from the
-\texttt{Storage back-end}, the synchronization time becomes a good estimator of the processing time
-incurred by the tandem ObjectMQ-\texttt{SyncService}. As shown in the figure, the time to reconcile
-a file removal in five clients is less than $2.6$ seconds, which is quite good, taking into account that the
-\texttt{Metada back-end} is a relational database.
-As a boxplot enables to assess the dispersion of a given distribution, we gain important qualitative
-insights from Fig.~\ref{fig:time:a}. One important observation is that the distribution of the
-synchronization time for the UPDATE operation is right skewed, exhibiting synchronization times
-significantly greater than the median value of $2.75$ seconds. This is especially noticeable by
-the significant number of UPDATE operations exceeding the upper whisker. This skewness is explained
-by the use of fixed-size blocks. A major problem with static chunking is that inserting even a
-single byte at the beginning of a file will shift all chunk boundaries~\cite{Eshghi05}, requiring
-the retransmission of the whole file to the \texttt{Storage back-end}. This defect can be simply
-corrected by applying any of the content-based chunking algorithms supported by StackSync like
-TTTD ~\cite{Eshghi05}.
-
-Since the time taken up by the ADD operation is affected by the file size, one interesting question
-is to assess how file size affects the synchronization time. Fig.~\ref{fig:time:b} shows the synchronization
-time as a function of file size. As can be seen in the figure, the larger the file size, the longer
-the synchronization time. However, what is most interesting is the fact that the increase in time
-is only linear when file size is larger than $2.5$ MBs, which indicates that for small files the
-time to transfer chunks from and to the \texttt{Storage back-end} is not significant compared
-with the time incurred by the tandem ObjectMQ-\texttt{SyncService}. Clearly, this poses the need for further research in file synchronization, since faster synchronization for small files can only be achieved by improvements in the \texttt{SyncService}.
-This emphasizes the value of.~\ref{fig:time:a} a tool like StackSync, which fills an important unexplored niche in the cloud computing design space.   
+\end{table} 
 
 \section{Synchronization Time}
 
