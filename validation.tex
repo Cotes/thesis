@@ -99,10 +99,10 @@ ADD, UPDATE, and DELETE operations using real content.
 
 \begin{figure*}[t]
   \centering
-  \label{fig:cdf_files}
   \includegraphics[width=0.7\textwidth]{figures/cdf_files}
-  \vspace{-5pt}
+  %\vspace{-5pt}
   \caption{File size vs file count distribution}
+  \label{fig:cdf_files}
 \end{figure*}
 
 \section{Protocol Overhead}
@@ -113,19 +113,18 @@ $535.41$ MB. For this experiment, our benchmarking tool considered each of the o
 to measure the overhead accurately. That is, the next operation did not start until the current one was
 successfully committed.
 
+\begin{figure*}[h]
+  \centering
+  \label{fig:overhead_clients}
+  \includegraphics[width=0.6\textwidth]{figures/overhead_clients}
+  \caption{Overhead}
+\end{figure*}
+
 The results are shown in Fig.~\ref{fig:overhead_clients}. As seen in this
 figure, Dropbox exhibits the highest overhead, sending up to $150$ MB of additional
 unnecessary traffic. This results agree very well with other studies such as that
 of~\cite{li13}. On the contrary, StackSync has a low overhead, \textit{comparable to that of commercial
 Personal Cloud services such as OneDrive}.
-
-\begin{figure*}[t]
-  \centering
-  \label{fig:overhead_clients}
-  \includegraphics[width=0.7\textwidth]{figures/overhead_clients}
-  \caption{Overhead}
-  \vspace{-5pt}
-\end{figure*}
 
 
 To gain a deeper understanding of the overhead, we prepared a new variant of
@@ -166,8 +165,7 @@ rest of the Personal Clouds.
     \label{fig:validation:actions_storage}
     \includegraphics[width=0.45\textwidth]{figures/actions_storage}
   }
-  \caption{Performance of StackSync file-syncing protocol.}
-  \vspace{-5pt}
+  \caption{Control and storage traffic overhead of StackSync and Dropbox}
   \label{fig:validation}
 \end{figure*}
 
@@ -234,7 +232,7 @@ with the time incurred by the tandem ObjectMQ-\texttt{SyncService}.
     \label{fig:synchronization_time:b}
     \includegraphics[width=0.45\textwidth]{figures/fig11}
   }
-	\caption{Performance of StackSync file-syncing protocol.}
+	\caption{Synchronization time}
   \vspace{-5pt}
   \label{fig:synchronization_time}
 \end{figure*}
