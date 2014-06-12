@@ -8,9 +8,7 @@ In some of these tests, we compare StackSync against other popular Personal Clou
 
 \section{Benchmark Methodology}
 
-\subsection{Benchmark Platform}
-
-\subsection{Testbed}
+\subsection{Benchmark Testbed}
 
 For all the experiments, we used the following testbed. The testbed included a front-end server and several desktop 
 PCs acting as clients. The front-end was an OpenStack Swift deployment with one proxy node and $4$ storage nodes.  
@@ -95,7 +93,7 @@ The ADD operations generated a total data volume of $535.41$ MB whereas the UPDA
 $\approx 14$ KB. The average file size was of $583$ KB. Fig.~\ref{fig:cdf_files} plots
 the CDF of file size for our trace.
 
-Finally, to compare StackSync against other popular Personal Cloud services,
+Finally, to compare StackSync, our open source Personal Cloud, against other popular Personal Cloud services,
 we modified the benchmarking tool developed by Drago et al.~\cite{drago2013benchmarking} to
 conduct trace-driven experiments with the output of our generator. More specifically, we adapted
 their tool to measure the overhead of the different file syncing protocols under a sequence of
