@@ -413,27 +413,26 @@ Size 		& Provider & Min. & Q1 & Median & Q3 & Max. & Mean ($\mu$) & Std. Dev. ($
 \label{tab:service_variability_file_size}
 \end{table*}
 
-\begin{figure*}
-
-  \subfloat[SugarSync does not present important changes
+\begin{figure}[t]
+\center
+  \subfigure[SugarSync does not present important changes
   in both in/out traffic speed over time.]
 {\label{fig:transfer_time_series_variability_sugarsync}
-\includegraphics[width=0.315\textwidth]{sugarsync_time_series.eps}}
-  \subfloat[We observe daily patterns in the DropBox upload transfer speed.
+\includegraphics[width=0.45\textwidth]{figures/sugarsync_time_series.eps}}
+  \subfigure[We observe daily patterns in the DropBox upload transfer speed.
   Download transfer speed remains stable.]
 {\label{fig:transfer_time_series_variability_dropbox}
-\includegraphics[width=0.34\textwidth]{dropbox_time_series.eps}}  
-  \subfloat[Box upload transfers are highly variable and probably affected by
+\includegraphics[width=0.45\textwidth]{figures/dropbox_time_series.eps}}  
+  \subfigure[Box upload transfers are highly variable and probably affected by
   daily patterns.]
 {\label{fig:transfer_time_series_variability_box}
-
-\includegraphics[width=0.32\textwidth]{box_time_series.eps}}         
+\includegraphics[width=0.45\textwidth]{figures/box_time_series.eps}}         
    \caption{Evolution of Personal Clouds upload/download transfer speed during $5$ days. We plotted
    in a time-series fashion the mean aggregated bandwidth of all nodes ($600$ secs. time-slots) executing 
    the service variability workload in our university laboratories ($3$rd$-8$th July $2012$).}
    \label{fig:transfer_time_series_variability}
 	\vspace{-3mm}
-\end{figure*}
+\end{figure}
 
 
 \medskip
@@ -449,16 +448,6 @@ differently depending on the provider.~To wit, while SugarSync
 exhibits a \textit{stable service for both uploads and downloads}, at
 the price of a modest transfer capacity (Fig. \ref{fig:transfer_time_series_variability_sugarsync}), the upload transfer
 speed varies significantly over time for Dropbox and Box.
-
-\begin{figure}	  
-\includegraphics[width=0.22\textwidth]{transfer_speed_vs_storage_load_dropbox.eps}
-\includegraphics[width=0.22\textwidth]{transfer_speed_vs_storage_load_box.eps}
-	\vspace{-2mm}
-	\caption{Relationship between file MTS and the storage load of an account.}
-	
-	\label{fig:transfer_speed_vs_storage_load}
-	\vspace{-5mm}
-\end{figure}
 
 %As depicted in Fig. 
 Appreciably, \textit{DropBox exhibits appreciable 
