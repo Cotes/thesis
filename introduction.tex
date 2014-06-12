@@ -48,30 +48,18 @@ of modifications to those files that allowed us to evaluate our file-syncing ser
 Besides the traces, we also found the necessity to use a benchmarking framework for Personal Clouds, but the
 ones available were too simple and not enough to analize deeply their performance.
 
-\section{Problem statement}
-...
-\begin{itemize}
-	\item \textbf{No open architecture for Personal Clouds}. Commercial Personal Clouds solutions like Dropbox
-	are propietary, and rely on algorithms that are \textit{invisible} to the research community and existing open source alternatives fall short of addressing all the requirements of the Personal Clouds.
-	\item \textbf{Lack of real traces}. Although there are some articles that study user behavior in Personal Clouds,
-	there are not real traces available for the research community.
-	\item \textbf{Simple benchmarking tools}. Current benchmarking tools for Personal Clouds are simple and not enough to
-	analize deeply their performance.
-\end{itemize}
-
 \section{Contributions of this Thesis}
-We propose \texttt{StackSync}: an open source Personal Cloud. \texttt{StackSync} is, as far as we know, the first
-open source Personal Cloud that satisfies all the requirements from the 3S Personal Cloud definition. In this work we put more emphasis on the sync protocol, which is the core service of any Personal Cloud, and on the validation in order to compare our novel implementation with other commercial solutions.
-
 Our major contributions are the following:
 
 \begin{itemize}
-	\item \textbf{Analysis of the state-of-the-art}. Prior to designing our solution, we study the current approaches concerning Personal Cloud systems which is reported further in this manuscript.
-	\item \textbf{Design and implementation of sharing capabilities for StackSync}. StackSync lacked sharing capabilites to accomplish the requirements from the 3S definition. 
-	\item \textbf{Generation of realistic traces}. To evaluate the system, we developed a benchmarking tool to generate
-realistic workloads. We implemented this tool because we found no publicly available trace containing both 
-the files and the history of modifications to those files that allowed us to evaluate our file-syncing service.
-	\item \textbf{Evaluation and validation of StackSync}. StackSync has been extensively tested using generated traces to validate the syncing protocol and the efficient use of resources. Furthermore, we extended an open benchmark \cite{drago2013benchmarking} and we compared our service with Dropbox, Box, OneDrive, and Google Drive.
+	\item \textbf{Analysis of the state-of-the-art}. Prior to designing our solution, we study current approaches concerning Personal Cloud systems which is reported further in this manuscript.
+	\item \textbf{Measurement of Personal Cloud services}. We present a measurement study of various Personal Clouds: Dropbox, Box, and SugarSync.
+	\item \textbf{Improvement of an existing benchmarking framework}. In order to study the performance of Personal
+	Clouds synchronization protocols, we developed some new benchmarks on top of an existing benchmarking tool.
+	\item \textbf{Generation of realistic traces}. To simulate user behavior in our benchmarks, we created a
+	generator of realistic traces. Thanks to this tool, we could creat workloads with both files and the history of modifications.
+	\item \textbf{Benchmarking of Personal Clouds Synchronization}. In this part, some Personal Clouds, including StackSync, have
+	been extensively tested using genereated traces to analyze the efficient use of resources.	
 \end{itemize}
 
 \section{Thesis structure}
