@@ -6,6 +6,11 @@ services to characterize their performance in two different ways, data transfers
 and synchronization protocol.
 
 First of all, we present a measurement study of various Personal Clouds: Dropbox, Box and SugarSync.
+During the measurement we employed two different scenarios to execute our tests:
+University laboratories and PlanetLab. With the use of these two platforms we could
+evaluate how the geographic location of a client impacts on the QoS. Furthermore, we analyze
+daily patterns in services and transfer speeds for the services.
+
 From this work we conclude:
 \begin{itemize}
 	\item The transfer performance of these services 
@@ -19,7 +24,6 @@ From this work we conclude:
 	\item The \textit{variability} of transfers depends on several
 	factors, such as the \textit{traffic type (in/out) or the hour of the day}.
 	Actually, we found daily patterns in the DropBox service.
-
 \end{itemize}
 
 After the measurement, we study the sync protocol of StackSync, our open source Personal Cloud,
@@ -32,7 +36,20 @@ way as a Personal Cloud. In the comparison with other private solutions, we have
 in terms of overhead, we have done a good work.
 
 \section{Future Work}
+There are some improvements that can be done to this thesis:
 
-1 crear nuevos tests
+\begin{itemize}
+	\item \textbf{CPU and RAM monitorization}. The benchmarking tool can be improved by monitoring
+	the usage of CPU and RAM. With this improve we will understand how much computation power
+	needs a desktop client to process user actions.
+	\item \textbf{Implement new benchmarks}. In this work we created an additional benchmark that captures
+	the traffic overhead. In future works we can implement another specific types of benchmarks, for example,
+	synchronize a log file.
+	\item \textbf{Create realistic files}. With our trace generator we can simulate user behaviour, but
+	we only synchronize binary random files. An improvement could be to generate files with real content
+	on them and with different file extensions, such as .docx, .xml or .mp3.
+\end{itemize}
 
-2 mejorar en las cosas que stacksync pierde
+Furthermore, the results exposed in this thesis could be used to implement new improvements in the StackSync
+client. For example, updating files generates a huge overhead. Now that we know this issue, we can work
+on advanced mechanisms to reduce overhead when synchronizing updates.
