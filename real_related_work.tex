@@ -1,4 +1,10 @@
 \chapter{Related work}
+
+\emph{In this chapter, we study the state-of-the-art of Personal Cloud. First of all,
+we review a brief history of the Personal Cloud term. Later, we discuss about recent
+publications about measuring and benchmarking Personal Clouds. We end this chapter 
+explaining related work on synchronization algorithms.}
+
 \section{A Brief History of the Personal Cloud Term}
 
 In the past years there have been divergent views of the ``Personal Cloud'' concept.  
@@ -17,6 +23,52 @@ sync and sharing from heterogeneous devices. In fact,  the term ``Personal Cloud
 received a lot of attention with the recent research reports from Forrester \cite{forrester}
 and Gartner \cite{gartner}. Like us, these reports associate the term Personal Cloud with
 online cloud storage services such as Dropbox, Box, or Google Drive among others.
+
+\section{Measurements and benchmarks}
+The performance evaluation of Cloud services is a
+current hot topic with several papers appearing 
+recently~\cite{variability_ccgrid11, nature_data_center_traffic}. A large corpus 
+of works have focused on measuring distinct aspects of a Cloud service,
+such as computing performance~\cite{ec2benchmarking}, service 
+variability~\cite{variability_ccgrid11}, and the nature of 
+datacenter traffic~\cite{nature_data_center_traffic}, among
+others issues.
+
+Unfortunately, only few works have turned attention to measure the performance
+of Cloud storage services. To wit, the authors in~\cite{early_experiences_azure}
+explore the performance of Microsoft Azure,
+including storage. In this line, the authors in~\cite{s3_grids} execute an extensive
+measurement against Amazon S3 to elucidate whether Cloud storage is suitable
+for scientific Grids or not.
+Similarly, \cite{bergen2011client} presents a performance 
+analysis of the Amazon Web Services, with no
+insights regarding Personal Clouds.
+
+File hosting and file sharing Cloud services have been analyzed in depth
+by several works \cite{imc_rapidshare, one_click_hosting}.
+They provide an interesting substrate to understand both
+the behavior of users and the QoS of major providers (e.g. RapidShare).
+
+The comparison of public Clouds have recently aroused much
+interest. Concretely, the authors in \cite{cloudcmp} present CloudCmp, a systematic
+performance and cost comparator of Cloud providers.
+The authors validate CloudCmp by measuring the elastic computing, 
+storage, and networking services offered by several
+public Clouds based on metrics reflecting the impact 
+on the performance delivered to customer applications.
+
+In a similar fashion, the authors of \cite{hu2010good} compare Dropbox, Mozy, 
+Carbonite and CrashPlan backup services. However, their analysis of 
+the performance, reliability and security levels is rather lightweight, and
+more work is needed to characterize these services with enough rigor.
+
+Recently, the authors in \cite{drago2012inside} presented an
+extensive measurement of DropBox in two scenarios: in a university
+campus and in residential networks. They analyzed and characterized the 
+traffic transmitted by users, as well as the
+functioning and architecture of the service. Instead of analyzing the behavior
+of users using a specific Personal Cloud, we focused on
+characterizing the service that many providers offer.
 
 \section{Synchronization Algorithms}
 
@@ -67,49 +119,3 @@ server, used for receiving information about changes performed elsewhere.
 Overall, \textit{providing an efficient and scalable sync protocol} poses a grand challenge for
 engineers in charge of building Personal Cloud storage services, due to the intricate
 relationships between deduplication, notification and metadata management.
-
-\section{Measurements and benchmarks}
-The performance evaluation of Cloud services is a
-current hot topic with several papers appearing 
-recently~\cite{variability_ccgrid11, nature_data_center_traffic}. A large corpus 
-of works have focused on measuring distinct aspects of a Cloud service,
-such as computing performance~\cite{ec2benchmarking}, service 
-variability~\cite{variability_ccgrid11}, and the nature of 
-datacenter traffic~\cite{nature_data_center_traffic}, among
-others issues.
-
-Unfortunately, only few works have turned attention to measure the performance
-of Cloud storage services. To wit, the authors in~\cite{early_experiences_azure}
-explore the performance of Microsoft Azure,
-including storage. In this line, the authors in~\cite{s3_grids} execute an extensive
-measurement against Amazon S3 to elucidate whether Cloud storage is suitable
-for scientific Grids or not.
-Similarly, \cite{bergen2011client} presents a performance 
-analysis of the Amazon Web Services, with no
-insights regarding Personal Clouds.
-
-File hosting and file sharing Cloud services have been analyzed in depth
-by several works \cite{imc_rapidshare, one_click_hosting}.
-They provide an interesting substrate to understand both
-the behavior of users and the QoS of major providers (e.g. RapidShare).
-
-The comparison of public Clouds have recently aroused much
-interest. Concretely, the authors in \cite{cloudcmp} present CloudCmp, a systematic
-performance and cost comparator of Cloud providers.
-The authors validate CloudCmp by measuring the elastic computing, 
-storage, and networking services offered by several
-public Clouds based on metrics reflecting the impact 
-on the performance delivered to customer applications.
-
-In a similar fashion, the authors of \cite{hu2010good} compare Dropbox, Mozy, 
-Carbonite and CrashPlan backup services. However, their analysis of 
-the performance, reliability and security levels is rather lightweight, and
-more work is needed to characterize these services with enough rigor.
-
-Recently, the authors in \cite{drago2012inside} presented an
-extensive measurement of DropBox in two scenarios: in a university
-campus and in residential networks. They analyzed and characterized the 
-traffic transmitted by users, as well as the
-functioning and architecture of the service. Instead of analyzing the behavior
-of users using a specific Personal Cloud, we focused on
-characterizing the service that many providers offer.
