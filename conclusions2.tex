@@ -1,19 +1,38 @@
 \chapter{Conclusions}
 
-In this article, we have introduced StackSync, an open framework for Personal Cloud systems.
-Its architecture is highly modular, with each module represented by a well-defined API,
-allowing researchers to replace components for innovation in versioning,
-deduplication, live synchronization or continuous reconciliation, among other relevant topics. 
-StackSync provides a reference implementation and useful tools for rapid prototyping and evaluation. 
-The reference implementation of the file synchronization engine has been built
-on top of a lightweight MOM-RPC middleware, called ObjectMQ, whose one-to-one and one-to-many
-abstractions has considerably simplified the design of StackSync. This middleware is ideally
-suited to support push notification over persistent connections,
-which is critical for live synchronization.  
+\section{Conclusions}
+In this thesis, we have examined central aspects of Personal Cloud storages 
+services to characterize their performance in two different ways, data transfers
+and synchronization protocol.
 
-StackSync is now under active development in the context of the FP7 CloudSpaces project
-with the collaboration of several partners. Further work includes adding privacy measures and
-supporting adaptive storage in collaboration with EPFL and EURECOM. 
-Since today most of these systems are proprietary, relying on infrastructures that are
-invisible to the research community, we believe that StackSync will help to advance state
-of the art in Personal Cloud systems.
+First of all, we present a measurement study of various Personal Clouds: Dropbox, Box and SugarSync.
+From this work we conclude:
+\begin{itemize}
+	\item The transfer performance of these services 
+	\textit{greatly varies from one provider to another}, which is a valuable 
+	piece of information for designers and developers.
+	
+	\item The \textit{geographic location} of a client importantly impacts on
+	the speed of transfers. For instance, North American clients experience 
+	transfers several times faster than European ones for the same Personal Cloud. 
+	
+	\item The \textit{variability} of transfers depends on several
+	factors, such as the \textit{traffic type (in/out) or the hour of the day}.
+	Actually, we found daily patterns in the DropBox service.
+
+\end{itemize}
+
+After the measurement, we study the sync protocol of StackSync, our open source Personal Cloud,
+and other private solutions. To perform this tests we developed a novel trace generated
+that could be useful for other researchers to simulate user behaviour. We have also extended
+a benchmarking tool to achieve realistic tests with our generated traces.
+
+As a result of these experiments, we can conclude that StackSync is going in the right
+way as a Personal Cloud. In the comparison with other private solutions, we have demonstrated that,
+in terms of overhead, we have done a good work.
+
+\section{Future Work}
+
+1 crear nuevos tests
+
+2 mejorar en las cosas que stacksync pierde
