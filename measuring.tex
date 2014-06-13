@@ -47,9 +47,11 @@ Machines were internally connected to the same switch via a $100$Mbps Ethernet l
 two geographic regions: Western Europe and North America. 
 This platform is constituted by heterogeneous (bandwidth, CPU) machines from several
 universities and research institutes. Moreover, there were two points to consider
-when analyzing data coming from PlanetLab nodes: i) Machines might be concurrently
-used by other processes and users, and ii) The quota system of these machines
-limited the amount of in/out data transferred daily. 
+when analyzing data coming from PlanetLab nodes: 
+\begin{itemize}
+	\item Machines might be concurrently used by other processes and users.
+	\item The quota system of these machines limited the amount of in/out data transferred daily. 
+\end{itemize}
 
 Specifically, we used the PlanetLab infrastructure for
 a high-level assessment of Personal Clouds depending on the 
@@ -72,7 +74,7 @@ Location & Op. Type & Operations & Transferred Data \\ \hline
  & \texttt{GET} & $354,909$ & $31.751$ TB\\
  & \texttt{PUT} & $129,716$ & $9.803$ TB\\ \hline
 \end{tabular}
-\caption{Summary of Measurement Data (May $10$ $-$ July $15$)}
+\caption{Summary of Measurement Data}
 \vspace{-9mm}
 \label{tab:measurement_data}
 \end{center}
@@ -234,9 +236,7 @@ Cloud ecosystem and the possible implications to the service delivered to end-us
 {\label{fig:up_bw_comparison}
 \includegraphics[width=0.5\textwidth]{figures/up_bw_comparison_new.eps}}
  
-   \caption{Transfer capacity of Box, DropBox and SugarSync free account REST API services.
-   The data represented in these figures corresponds to the aggregation
-   of the up/down and service variability workloads during $10$ days (June/July $2012$) in our university laboratories.}
+   \caption{Transfer capacity of Box, DropBox and SugarSync free account REST API services.}
    \label{fig:transfer_mean_speeds_and_bw_distributions}
    \vspace{-4mm}
 \end{figure}
@@ -269,7 +269,7 @@ the enforcement of more restrictive bandwidth control policies to
 the outbound traffic.
 \medskip
 
-\subsubsection*{Transfers \& geographic location}. 
+\subsubsection*{Transfers \& geographic location} 
 Next, we analyze transfer speeds depending
 on the geographic location of vantage points. 
 
@@ -312,9 +312,7 @@ in SugarSync, irrespective of the geographic location.
 %  \subfloat[-.]
 %{\label{fig:mean_download_speed_distributions_by_file_size}
 %\includegraphics[width=0.24\textwidth]{mean_download_speed_distributions_by_file_size.eps}} 
-	\caption{File MTS distributions of PlanetLab nodes from June $22$ to July $15$ 
-	$2012$ depending on their geographic location (up/down workload).
-	Clearly, USA and Canada nodes exhibit faster transfers than European nodes.}
+	\caption{File MTS distributions of PlanetLab nodes depending on their geographic location.}
 	\label{fig:transfer_times_geographic_location}
 	%\vspace{-1mm}
 \end{figure}
@@ -480,17 +478,15 @@ Size 		& Provider & Min. & Q1 & Median & Q3 & Max. & Mean ($\mu$) & Std. Dev. ($
   in both in/out traffic speed over time.]
 {\label{fig:transfer_time_series_variability_sugarsync}
 \includegraphics[width=0.45\textwidth]{figures/sugarsync_time_series.eps}}
-  \subfigure[We observe daily patterns in the DropBox upload transfer speed.
-  Download transfer speed remains stable.]
-{\label{fig:transfer_time_series_variability_dropbox}
-\includegraphics[width=0.45\textwidth]{figures/dropbox_time_series.eps}}  
   \subfigure[Box upload transfers are highly variable and probably affected by
   daily patterns.]
 {\label{fig:transfer_time_series_variability_box}
 \includegraphics[width=0.45\textwidth]{figures/box_time_series.eps}}         
-   \caption{Evolution of Personal Clouds upload/download transfer speed during $5$ days. We plotted
-   in a time-series fashion the mean aggregated bandwidth of all nodes ($600$ secs. time-slots) executing 
-   the service variability workload in our university laboratories ($3$rd$-8$th July $2012$).}
+\subfigure[We observe daily patterns in the DropBox upload transfer speed.
+  Download transfer speed remains stable.]
+{\label{fig:transfer_time_series_variability_dropbox}
+\includegraphics[width=0.65\textwidth]{figures/dropbox_time_series.pdf}}  
+   \caption{Evolution of Personal Clouds upload/download transfer speed during $5$ days.}
    \label{fig:transfer_time_series_variability}
 	\vspace{-3mm}
 \end{figure}
@@ -514,8 +510,8 @@ speed varies significantly over time for Dropbox and Box.
 %As depicted in Fig. 
 Appreciably, \textit{DropBox exhibits appreciable 
 daily upload speed patterns} (Fig. \ref{fig:transfer_time_series_variability_dropbox}). 
-Data represented in Fig. \ref{fig:transfer_time_series_variability} was gathered between
-July $3$, $6$:$00$p.m. and July $8$, $3$:$00$p.m. Clearly, during 
+Data represented in Fig. \ref{fig:transfer_time_series_variability} was gathered during 5 days,
+starting at $6$:$00$p.m. the first day and finishing the last day at $3$:$00$p.m. Clearly, during 
 night hours ($1$ a.m.$-10$ a.m.), transfer speed was between $15\%$ to
 $35\%$ higher than during diurnal hours. This phenomenon has been also
 detected in the experiments performed in PlanetLab, thereby discarding
