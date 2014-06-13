@@ -191,6 +191,42 @@ rest of the Personal Clouds.
     \label{table:bundle}
 \end{table} 
 
+\subsection{ownCloud Vs StackSync}
+
+Continuing with the clients overhead, we want to compare the metadata overhead produced by ownCloud and StackSync. As stated in the related work, ownCloud is using a pull-based approach based on the WEBDAV protocol. The ownCloud client discover changes by continuously pulling the server with WEBDAV PROPFIND requests for the root user folder every 30 seconds approximately. Each of these requests returns a XML file with a full list of the files and their associated metadata.
+
+
+Since the PROPFIND request only returns the metadata of the files in the same level, it will not contain change information of files or folders in the levels below. This implies that a change in a subfolder will trigger recursive PROPFIND requests in all the levels of the path. When the change is located in the subfolder, the client then performs a GET request to retrieve the file and stay synced with the rest of the clients.
+
+Due to obvious reasons, this behaviour can be highly inefficient since the amount of metadata exchanged between the server and the client to stay synced could be important (i.e. discover a new file stored in a five-level depth folder produces five PROPFIND requests). It is also important to take into account that each PROPFIND request over a folder involves to get the metadata of all the files inside this folder.
+
+In Fig.~\ref{fig:owncloud} we can see the metadata overhead for ownCloud and StackSync when one node modifies files (uploader) and other must synchronise these changes (downloader). As we can observe in the figure, ownCloud's uploader node is producing for our experiment around 600-800 KBytes/minutes of metadata traffic, and the downloader is producing around 100-300 KBytes/minute of medatada traffic.  This massive traffic is a direct consequence of the inefficient ownCloud pull protocol.
+
+In Fig.~\ref{fig:owncloud} we can see the sequence diagram of ownCloud sync protocol. The node committing new changes (uploader) first obtains the current state (PROPFIND), then uploads the file (PUT), then requests the new change (PROPPATCH), and then rechecks with PROPFIND that the change was correctly applied. The rest of nodes (downloaders) will just ask for changes (PROPFIND) and then retrieve (GET) the entire file. 
+
+
+Note that PROPFIND and PROPPATCH are synchronous calls that are blocking the client and the server. Note also that if the change is not located in the root folder, it will require recursive PROPFIND requests for the entire path to the change for all clients.  This is not an optimized protocol but a simple pull interface to WEBDAV. As we can see in Fig.~\ref{fig:owncloud},  StackSync is producing an order of magnitude less overhead  than ownCloud for the same experiment  (around 10KBytes/Minute for both uploader and downloader nodes). 
+
+
+Besides the inefficient metadata processing based on WebDAV pulling, data traffic is coupled to the same metadata server. Furthermore, ownCloud lacks any chunking, deduplication or even caching mechanisms. It just uploads or downloads the entire file if anything has changed.
+
+ownCloud has devoted most efforts in developing the web document manager and web applications. They are providing a very simple and minimalist WEBDAV front-end  to their web server. This could work for a single user (home repository) but the amount of useless traffic make it clearly infeasible for a large deployment.
+
+\begin{figure*}[t]
+  \centering
+  \subfigure[ownCloud vs StackSync metadata overhead]{
+    \label{fig:time:a}
+    \includegraphics[width=0.45\textwidth]{figures/owncloud_vs_ss_metadata}
+  }
+  \subfigure[ownCloud sync protocol]{
+    \label{fig:time:b}
+    \includegraphics[width=0.45\textwidth]{figures/owncloud}
+  }
+  \caption{ownCloud vs StackSync}
+  \vspace{-5pt}
+  \label{fig:owncloud}
+\end{figure*}
+
 \subsection{Synchronization Time}
 
 Another basic question to be examined is the delay experienced~by users to have their devices in sync. 
@@ -242,79 +278,39 @@ with the time incurred by the tandem ObjectMQ-\texttt{SyncService}.
 \end{figure*}
 
 
-\subsection{Scalability and load-balancing}
-
-Finally, we performed an initial experiment to assess the scalability and load-balancing of 
-the StackSync platform. To this end, we performed stress tests generating $100$, $200$, and
-$400$ commit requests per second from different clients. We wanted to measure how our service
-handles a high number of operations per second, and how the load can be balanced among different
-\texttt{SyncService} instances.
-
-In this experiment, we used several system setups: $10$ Desktop PCs generating each one $10$ 
-requests per second ($100$ commits/sec in the server), $20$ Desktop PCs generating each one
-$10$ requests per second ($200$ commits/sec in the server), and $20$ Desktop PCs generating
-each one $20$ requests per second ($400$ commits/sec in the server). 
-The used trace was the same of the prior experiments but injected from different clients.
-For each system configuration, we executed the experiment using either one single-threaded or four single-threaded 
-\texttt{SyncService} instances. 
-
-For each commit request, we recorded the time since the client sent out the commit request until the commit event 
-confirming this changes was received in the client. Note that this time captured the entire life-cycle of the protocol,
-including message dispatching, time to process the operation in the \texttt{SyncService}
-(including access to the database), and finally the dispatching of the commit event to the requesting node.
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.5\textwidth]{figures/performance_scalability}
-\caption{Scalability and load balancing}\label{fig:scalability}
-\end{figure}
-
-
-In Fig. ~\ref{fig:scalability}, we illustrate the time for $1$ and $4$ \texttt{SyncService}s under different
-loads: $100$, $200$, $400$ commits/sec. Our service shows promising numbers in the processing of concurrent
-requests since it is able to handle a commit in less than $0.1$ seconds with $4$ instances when receiving
-a bulk of $200$ requests/sec. This clearly indicates that balancing the load
-among multiple instances produces a significant performance boost. If we consider that all services are
-running in the same machine, our results show that the bottleneck is in the transactional database
-rather than in the communication layer, i.e., ObjectMQ. The performance gains observed here open the
-way to future optimizations to fine tune the scalability of the overall service. 
-
-
-
-
-
-\subsection{ownCloud Vs StackSync}
-
-In this first experiment we want to compare the metadata overhead produced by ownCloud and StackSync. As stated in the related work, ownCloud is using a pull-based approach based on the WEBDAV protocol. The ownCloud client discover changes by continuously pulling the server with WEBDAV PROPFIND requests for the root user folder every 30 seconds approximately. Each of these requests returns a XML file with a full list of the files and their associated metadata.
-
-
-Since the PROPFIND request only returns the metadata of the files in the same level, it will not contain change information of files or folders in the levels below. This implies that a change in a subfolder will trigger recursive PROPFIND requests in all the levels of the path. When the change is located in the subfolder, the client then performs a GET request to retrieve the file and stay synced with the rest of the clients.
-
-Due to obvious reasons, this behaviour can be highly inefficient since the amount of metadata exchanged between the server and the client to stay synced could be important (i.e. discover a new file stored in a five-level depth folder produces five PROPFIND requests). It is also important to take into account that each PROPFIND request over a folder involves to get the metadata of all the files inside this folder.
-
-In Fig.~\ref{fig:owncloud} we can see the metadata overhead for ownCloud and StackSync when one node modifies files (uploader) and other must synchronise these changes (downloader). As we can observe in the figure, ownCloud's uploader node is producing for our experiment around 600-800 KBytes/minutes of metadata traffic, and the downloader is producing around 100-300 KBytes/minute of medatada traffic.  This massive traffic is a direct consequence of the inefficient ownCloud pull protocol.
-
-In Fig.~\ref{fig:owncloud} we can see the sequence diagram of ownCloud sync protocol. The node committing new changes (uploader) first obtains the current state (PROPFIND), then uploads the file (PUT), then requests the new change (PROPPATCH), and then rechecks with PROPFIND that the change was correctly applied. The rest of nodes (downloaders) will just ask for changes (PROPFIND) and then retrieve (GET) the entire file. 
-
-
-Note that PROPFIND and PROPPATCH are synchronous calls that are blocking the client and the server. Note also that if the change is not located in the root folder, it will require recursive PROPFIND requests for the entire path to the change for all clients.  This is not an optimized protocol but a simple pull interface to WEBDAV. As we can see in Fig.~\ref{fig:owncloud},  StackSync is producing an order of magnitude less overhead  than ownCloud for the same experiment  (around 10KBytes/Minute for both uploader and downloader nodes). 
-
-
-Besides the inefficient metadata processing based on WebDAV pulling, data traffic is coupled to the same metadata server. Furthermore, ownCloud lacks any chunking, deduplication or even caching mechanisms. It just uploads or downloads the entire file if anything has changed.
-
-ownCloud has devoted most efforts in developing the web document manager and web applications. They are providing a very simple and minimalist WEBDAV front-end  to their web server. This could work for a single user (home repository) but the amount of useless traffic make it clearly infeasible for a large deployment.
-
-\begin{figure*}[t]
-  \centering
-  \subfigure[ownCloud vs StackSync metadata overhead]{
-    \label{fig:time:a}
-    \includegraphics[width=0.45\textwidth]{figures/owncloud_vs_ss_metadata}
-  }
-  \subfigure[ownCloud sync protocol]{
-    \label{fig:time:b}
-    \includegraphics[width=0.45\textwidth]{figures/owncloud}
-  }
-  \caption{ownCloud vs StackSync}
-  \vspace{-5pt}
-  \label{fig:owncloud}
-\end{figure*}
+%\subsection{Scalability and load-balancing}
+%
+%Finally, we performed an initial experiment to assess the scalability and load-balancing of 
+%the StackSync platform. To this end, we performed stress tests generating $100$, $200$, and
+%$400$ commit requests per second from different clients. We wanted to measure how our service
+%handles a high number of operations per second, and how the load can be balanced among different
+%\texttt{SyncService} instances.
+%
+%In this experiment, we used several system setups: $10$ Desktop PCs generating each one $10$ 
+%requests per second ($100$ commits/sec in the server), $20$ Desktop PCs generating each one
+%$10$ requests per second ($200$ commits/sec in the server), and $20$ Desktop PCs generating
+%each one $20$ requests per second ($400$ commits/sec in the server). 
+%The used trace was the same of the prior experiments but injected from different clients.
+%For each system configuration, we executed the experiment using either one single-threaded or four single-threaded 
+%\texttt{SyncService} instances. 
+%
+%For each commit request, we recorded the time since the client sent out the commit request until the commit event 
+%confirming this changes was received in the client. Note that this time captured the entire life-cycle of the protocol,
+%including message dispatching, time to process the operation in the \texttt{SyncService}
+%(including access to the database), and finally the dispatching of the commit event to the requesting node.
+%
+%\begin{figure}[t]
+%\centering
+%\includegraphics[width=0.5\textwidth]{figures/performance_scalability}
+%\caption{Scalability and load balancing}\label{fig:scalability}
+%\end{figure}
+%
+%
+%In Fig. ~\ref{fig:scalability}, we illustrate the time for $1$ and $4$ \texttt{SyncService}s under different
+%loads: $100$, $200$, $400$ commits/sec. Our service shows promising numbers in the processing of concurrent
+%requests since it is able to handle a commit in less than $0.1$ seconds with $4$ instances when receiving
+%a bulk of $200$ requests/sec. This clearly indicates that balancing the load
+%among multiple instances produces a significant performance boost. If we consider that all services are
+%running in the same machine, our results show that the bottleneck is in the transactional database
+%rather than in the communication layer, i.e., ObjectMQ. The performance gains observed here open the
+%way to future optimizations to fine tune the scalability of the overall service. 
