@@ -123,6 +123,38 @@ successfully committed.
   \caption{Overhead}
 \end{figure*}
 
+\begin{figure*}[t]
+  \centering
+  \subfigure[Control traffic overhead]{
+    \label{fig:validation:actions_control}
+    \includegraphics[width=0.45\textwidth]{figures/actions_metadata}
+  }
+  \subfigure[Storage traffic overhead]{
+    \label{fig:validation:actions_storage}
+    \includegraphics[width=0.45\textwidth]{figures/actions_storage}
+  }
+  \caption{Control and storage traffic overhead of StackSync and Dropbox}
+  \label{fig:validation}
+\end{figure*}
+
+\begin{table}
+    \centering
+    \begin{tabular}{  c | c | c | c | c | }
+    \cline{2-5}
+    & Batch size & Control & Storage & Total \\ \hline
+    \multicolumn{1}{ |c| }{\multirow{4}{*}{Dropbox}} & 5 & 8.30 MB & 633.06 MB & 641.36 MB \\ \cline{2-5}
+    \multicolumn{1}{ |c| }{}& 10 & 5.13 MB & 638.26 MB & 643.39 MB \\ \cline{2-5} 
+    \multicolumn{1}{ |c| }{}& 20 & 3.28 MB & 635.82 MB & 639.10 MB \\ \cline{2-5}
+    \multicolumn{1}{ |c| }{}& 40 & 2.23 MB & 632.05 MB & 634.28 MB \\ \hline
+    \multicolumn{1}{ |c| }{\multirow{4}{*}{StackSync}} & 5 & 2.14 MB & 569.89 MB & 572.03 MB \\ \cline{2-5}
+    \multicolumn{1}{ |c| }{}& 10 & 1.58 MB & 570.10 MB &  571.68 MB \\ \cline{2-5}
+    \multicolumn{1}{ |c| }{}& 20 & 1.37 MB & 570.07 MB & 571.44 MB \\ \cline{2-5}
+    \multicolumn{1}{ |c| }{}& 40 & 1.25 MB & 567.77 MB & 569.02 MB \\ \hline
+    \end{tabular}
+    \caption{Effect of File Bundling.}
+    \label{table:bundle}
+\end{table} 
+
 The results are shown in Fig.~\ref{fig:overhead_clients}. As seen in this
 figure, Dropbox exhibits the highest overhead, sending up to $150$ MB of additional
 unnecessary traffic. This results agree very well with other studies such as that
@@ -157,38 +189,6 @@ performs more one action at the same time. Table \ref{table:bundle} lists
 the results obtained after executing the trace for both Dropbox and StackSync with different
 batch sizes. Dropbox reduces traffic overhead in $30$ MB but it continues to be much higher than the
 rest of the Personal Clouds.
-
-\begin{figure*}[t]
-  \centering
-  \subfigure[Control traffic overhead]{
-    \label{fig:validation:actions_control}
-    \includegraphics[width=0.45\textwidth]{figures/actions_metadata}
-  }
-  \subfigure[Storage traffic overhead]{
-    \label{fig:validation:actions_storage}
-    \includegraphics[width=0.45\textwidth]{figures/actions_storage}
-  }
-  \caption{Control and storage traffic overhead of StackSync and Dropbox}
-  \label{fig:validation}
-\end{figure*}
-
-\begin{table}
-    \centering
-    \begin{tabular}{  c | c | c | c | c | }
-    \cline{2-5}
-    & Batch size & Control & Storage & Total \\ \hline
-    \multicolumn{1}{ |c| }{\multirow{4}{*}{Dropbox}} & 5 & 8.30 MB & 633.06 MB & 641.36 MB \\ \cline{2-5}
-    \multicolumn{1}{ |c| }{}& 10 & 5.13 MB & 638.26 MB & 643.39 MB \\ \cline{2-5} 
-    \multicolumn{1}{ |c| }{}& 20 & 3.28 MB & 635.82 MB & 639.10 MB \\ \cline{2-5}
-    \multicolumn{1}{ |c| }{}& 40 & 2.23 MB & 632.05 MB & 634.28 MB \\ \hline
-    \multicolumn{1}{ |c| }{\multirow{4}{*}{StackSync}} & 5 & 2.14 MB & 569.89 MB & 572.03 MB \\ \cline{2-5}
-    \multicolumn{1}{ |c| }{}& 10 & 1.58 MB & 570.10 MB &  571.68 MB \\ \cline{2-5}
-    \multicolumn{1}{ |c| }{}& 20 & 1.37 MB & 570.07 MB & 571.44 MB \\ \cline{2-5}
-    \multicolumn{1}{ |c| }{}& 40 & 1.25 MB & 567.77 MB & 569.02 MB \\ \hline
-    \end{tabular}
-    \caption{Effect of File Bundling.}
-    \label{table:bundle}
-\end{table} 
 
 \subsection{ownCloud Vs StackSync}
 
