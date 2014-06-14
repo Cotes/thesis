@@ -1,14 +1,13 @@
 \chapter{Benchmarking Personal Clouds Synchronization}
 
-In the evaluation of the reference implementation of StackSync framework, we set out to answer three basic questions: 
+\emph{In this chapter, we study the synchronization protocol of Personal Clouds. In some of these
+tests, we compare StackSync against other popular Personal Cloud services. We set out to answer three basic questions: 
 $1$) \textit{How much overhead does the system need to support?} $2$) \textit{How much time is needed to have multiple devices in sync?}; and 
-$3$) \textit{How does the system internally scale?}
-
-In some of these tests, we compare StackSync against other popular Personal Cloud services, including Dropbox, Microsoft OneDrive, Amazon Cloud Drive, Google Drive and Box.
+$3$) \textit{How does the system internally scale?}}
 
 \section{Benchmark Methodology}
 
-\subsection{Benchmark Testbed}
+\subsection{Benchmark Platform}
 
 For all the experiments, we used the following testbed. The testbed included a front-end server and several desktop 
 PCs acting as clients. The front-end was an OpenStack Swift deployment with one proxy node and $4$ storage nodes.  
